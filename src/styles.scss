@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Angular Material baseline tweak */
+html, body { height: 100%; }
+body { @apply bg-gray-50 text-gray-800; font-family: Roboto, "Noto Sans", sans-serif; }
+
+
+.mat-toolbar { @apply shadow-sm; }

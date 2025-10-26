@@ -1,0 +1,47 @@
+<div class="p-6 bg-gray-50 min-h-screen">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-semibold text-gray-800">Projects</h2>
+    <button (click)="refresh()"
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+      Refresh
+    </button>
+  </div>
+
+  <div class="overflow-x-auto shadow rounded-lg bg-white">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Summary</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cost Est.</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <tr *ngFor="let p of projects" class="hover:bg-gray-50">
+          <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{p.name}}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{p.location}}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{p.summary}}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{p.costEstimate | number}}</td>
+          <td class="px-6 py-4 whitespace-nowrap space-x-2">
+            <button (click)="openDetails(p.id)"
+                    class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">
+              Details
+            </button>
+            <button (click)="generateLink(p.id)"
+                    class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition">
+              Generate View Link
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="latestLink" class="mt-6 bg-gray-100 p-4 rounded shadow">
+    <p class="mb-2 text-gray-700 font-medium">View-only link (copy & send to customer):</p>
+    <input [value]="latestLink" readonly
+           class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+  </div>
+</div>
