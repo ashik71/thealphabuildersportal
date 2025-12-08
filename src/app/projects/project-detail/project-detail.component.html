@@ -1,1 +1,79 @@
-<p>project-detail works!</p>
+<div *ngIf="loading" class="p-10 text-center text-gray-500">
+  Loading project report...
+</div>
+
+<div *ngIf="!loading && report" class="p-8 space-y-8">
+
+  <!-- PROJECT SUMMARY CARD -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+    <div class="p-6 bg-white rounded-xl shadow">
+      <div class="text-gray-400 text-sm">Estimated Cost</div>
+      <div class="text-2xl font-bold text-blue-600">
+        {{ report.Summary.EstimatedTotal | number }}
+      </div>
+    </div>
+
+    <div class="p-6 bg-white rounded-xl shadow">
+      <div class="text-gray-400 text-sm">Actual Cost</div>
+      <div class="text-2xl font-bold text-green-600">
+        {{ report.Summary.ActualTotal | number }}
+      </div>
+    </div>
+
+    <div class="p-6 bg-white rounded-xl shadow">
+      <div class="text-gray-400 text-sm">Difference</div>
+      <div class="text-2xl font-bold" 
+        [ngClass]="{
+          'text-red-600': report.Summary.Difference < 0, 
+          'text-gray-800': report.Summary.Difference >= 0 
+        }">
+        {{ report.Summary.Difference | number }}
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COST BREAKDOWN TABLE -->
+  <div class="bg-white rounded-xl shadow p-6">
+
+    <h2 class="text-lg font-semibold mb-4">Cost Breakdown</h2>
+
+    <table class="table-auto w-full border-collapse">
+      <thead>
+        <tr class="text-left border-b">
+          <th class="py-2">Category</th>
+          <th class="py-2">Subcategory</th>
+          <th class="py-2 text-right">Estimated</th>
+          <th class="py-2 text-right">Actual</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of report.Breakdown" class="border-b hover:bg-gray-50">
+
+          <td class="py-2 font-medium">{{ item.CategoryName }}</td>
+
+          <td class="py-2 text-gray-600">
+            {{ item.SubcategoryName || '-' }}
+          </td>
+
+          <td class="py-2 text-right text-gray-500">
+            {{ item.EstimatedCost | number }}
+          </td>
+
+          <td class="py-2 text-right font-semibold"
+            [ngClass]="{ 
+              'text-green-600': item.ActualCost <= item.EstimatedCost, 
+              'text-red-600': item.ActualCost > item.EstimatedCost 
+            }">
+            {{ item.ActualCost | number }}
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

@@ -1,15 +1,8 @@
 import { Injectable } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { Observable, of } from 'rxjs';
-
-export interface Project {
-  id: string;
-  name: string;
-  location: string;
-  summary: string;
-  costEstimate: number;
-  createdAt: string;
-}
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 export interface ViewToken {
   token: string;
@@ -20,59 +13,41 @@ export interface ViewToken {
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
-  private projects: Project[] = [
-    { id: 'p1', name: 'Sunshine Heights', location: 'Dhaka', summary: 'Residential complex', costEstimate: 50000000, createdAt: new Date().toISOString() },
-    { id: 'p2', name: 'Riverfront Plaza', location: 'Chittagong', summary: 'Commercial building', costEstimate: 120000000, createdAt: new Date().toISOString() },
-  ];
+  private baseUrl = `${environment.apiBase}/projects`; // <-- update if your backend uses different prefix
 
-  // in-memory token store (demo)
-  private tokens: ViewToken[] = [];
+  constructor(private http: HttpClient) {}
 
-  listProjects(): Observable<Project[]> {
-    return of(this.projects);
+  // GET all projects
+  getAll(): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl);
   }
 
-  getProject(id: string): Observable<Project | undefined> {
-    return of(this.projects.find(p => p.id === id));
+  // GET single project by ID
+  getById(id: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${id}`);
   }
 
-  // admin creates a time-limited view-only link
-  createViewOnlyLink(projectId: string, expiresInMinutes = 60): Observable<{ url: string; token: ViewToken }> {
-    const token = uuidv4();
-    const expiresAt = Date.now() + expiresInMinutes * 60 * 1000;
-    const vt: ViewToken = { token, projectId, expiresAt, readonly: true };
-    this.tokens.push(vt);
-
-    const url = `${window.location.origin}/view/${token}`;
-    return of({ url, token: vt });
+  // CREATE new project (optional, only if needed)
+  create(project: any): Observable<any> {
+    return this.http.post<any>(this.baseUrl, project);
   }
 
-  // validate token and return associated project if valid
-  validateToken(token: string): Observable<{ valid: boolean; project?: Project; reason?: string }> {
-    const t = this.tokens.find(x => x.token === token);
-    if (!t) return of({ valid: false, reason: 'Invalid link' });
-
-    if (Date.now() > t.expiresAt) {
-      return of({ valid: false, reason: 'Link expired' });
-    }
-
-    const proj = this.projects.find(p => p.id === t.projectId);
-    if (!proj) return of({ valid: false, reason: 'Project not found' });
-
-    return of({ valid: true, project: proj });
+  // UPDATE project by ID
+  update(id: string, project: any): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/${id}`, project);
   }
 
-  // Admin-only: (demo) add project
-  addProject(p: Partial<Project>): Observable<Project> {
-    const proj: Project = {
-      id: 'p' + (this.projects.length + 1),
-      name: p.name || 'New Project',
-      location: p.location || '',
-      summary: p.summary || '',
-      costEstimate: p.costEstimate || 0,
-      createdAt: new Date().toISOString()
-    };
-    this.projects.push(proj);
-    return of(proj);
+  // DELETE project by ID
+  delete(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/${id}`);
+  }
+
+  // GET project details (if you have a special endpoint)
+  getDetails(id: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${id}/details`);
+  }
+
+  getProjectReport(projectId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${projectId}/report`);
   }
 }

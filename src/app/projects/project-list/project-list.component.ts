@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Project, ProjectService } from '../../services/project.service';
+import { ProjectService } from '../../services/project.service';
 import { Router } from '@angular/router';
+import { Project } from '../../interfaces/project.interface';
 
 @Component({
   selector: 'app-project-list',
@@ -16,7 +17,7 @@ export class ProjectListComponent implements OnInit {
   ngOnInit() { this.refresh(); }
 
   refresh() {
-    this.ps.listProjects().subscribe(p => this.projects = p);
+    this.ps.getAll().subscribe(p => this.projects = p);
   }
 
   openDetails(id: string) {
@@ -25,9 +26,6 @@ export class ProjectListComponent implements OnInit {
 
   generateLink(projectId: string) {
     // create view-only link valid for 60 minutes (demo)
-    this.ps.createViewOnlyLink(projectId, 60).subscribe(res => {
-      this.latestLink = res.url;
-      alert('Link generated (demo). Copy and send to customer.');
-    });
+    
   }
 }
