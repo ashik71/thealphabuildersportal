@@ -1,0 +1,19 @@
+<div class="page-header">
+  <div class="left">
+    <button
+      *ngIf="showBack"
+      class="back-btn"
+      type="button"
+      (click)="goBack()"
+    >
+      ←
+    </button>
+
+    <h2 class="title">{{ title }}</h2>
+  </div>
+
+  <div class="right">
+    <!-- Optional actions -->
+    <ng-content></ng-content>
+  </div>
+</div>

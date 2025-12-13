@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ProjectService } from '../../services/project.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-project-detail',
@@ -14,7 +14,8 @@ export class ProjectDetailComponent {
 
   constructor(
     private projectService: ProjectService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -33,5 +34,8 @@ export class ProjectDetailComponent {
         this.loading = false;
       },
     });
+  }
+  back(){
+    this.router.navigate(['/projects']);
   }
 }

@@ -9,6 +9,7 @@ import { ProjectListComponent } from './project-list/project-list.component';
 import { ProjectDetailComponent } from './project-detail/project-detail.component';
 import { AuthGuard } from '../guards/auth.guard';
 import { AdminGuard } from '../guards/admin.guard';
+import { SharedModule } from '../shared/shared.module';
 
 const routes: Routes = [
   { path: '', component: ProjectListComponent, canActivate: [AuthGuard, AdminGuard] },
@@ -26,6 +27,7 @@ const routes: Routes = [
     MatCardModule,
     MatButtonModule,
     MatInputModule,
+    SharedModule,
     RouterModule.forChild(routes)
   ]
 })

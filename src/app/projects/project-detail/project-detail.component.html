@@ -1,3 +1,5 @@
+<app-page-header title="Projects" [showBack]="true"></app-page-header>
+
 <div *ngIf="loading" class="p-10 text-center text-gray-500">
   Loading project report...
 </div>
@@ -23,8 +25,7 @@
 
     <div class="p-6 bg-white rounded-xl shadow">
       <div class="text-gray-400 text-sm">Difference</div>
-      <div class="text-2xl font-bold" 
-        [ngClass]="{
+      <div class="text-2xl font-bold" [ngClass]="{
           'text-red-600': report.Summary.Difference < 0, 
           'text-gray-800': report.Summary.Difference >= 0 
         }">
@@ -62,8 +63,7 @@
             {{ item.EstimatedCost | number }}
           </td>
 
-          <td class="py-2 text-right font-semibold"
-            [ngClass]="{ 
+          <td class="py-2 text-right font-semibold" [ngClass]="{ 
               'text-green-600': item.ActualCost <= item.EstimatedCost, 
               'text-red-600': item.ActualCost > item.EstimatedCost 
             }">

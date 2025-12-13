@@ -17,7 +17,7 @@ export class LoginComponent {
       .login(this.email, this.password)
       .pipe(take(1))
       .subscribe((response) => {
-        if (response.isAdmin) this.router.navigate(['/projects']);
+        if (response.isAdmin) this.router.navigate(['/admin']);
         else this.router.navigate(['/']);
       });
   }
