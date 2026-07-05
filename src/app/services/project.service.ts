@@ -1,53 +1,48 @@
-import { Injectable } from '@angular/core';
-import { v4 as uuidv4 } from 'uuid';
-import { Observable, of } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-export interface ViewToken {
-  token: string;
-  projectId: string;
-  expiresAt: number; // epoch ms
-  readonly: boolean;
-}
+import { Project, ProjectCostReport, ProjectInput, ViewLinkResponse } from '../interfaces/project.interface';
+import { ProjectFunding } from '../interfaces/funding.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectService {
-  private baseUrl = `${environment.apiBase}/projects`; // <-- update if your backend uses different prefix
+  private readonly http = inject(HttpClient);
+  private readonly baseUrl = `${environment.apiBase}/projects`;
 
-  constructor(private http: HttpClient) {}
-
-  // GET all projects
-  getAll(): Observable<any[]> {
-    return this.http.get<any[]>(this.baseUrl);
+  getAll(): Observable<Project[]> {
+    return this.http.get<Project[]>(this.baseUrl);
   }
 
-  // GET single project by ID
-  getById(id: string): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/${id}`);
+  getById(id: string): Observable<Project> {
+    return this.http.get<Project>(`${this.baseUrl}/${id}`);
   }
 
-  // CREATE new project (optional, only if needed)
-  create(project: any): Observable<any> {
-    return this.http.post<any>(this.baseUrl, project);
+  create(project: ProjectInput): Observable<Project> {
+    return this.http.post<Project>(this.baseUrl, project);
   }
 
-  // UPDATE project by ID
-  update(id: string, project: any): Observable<any> {
-    return this.http.put<any>(`${this.baseUrl}/${id}`, project);
+  update(id: string, project: Partial<ProjectInput>): Observable<Project> {
+    return this.http.put<Project>(`${this.baseUrl}/${id}`, project);
   }
 
-  // DELETE project by ID
-  delete(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.baseUrl}/${id}`);
+  delete(id: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.baseUrl}/${id}`);
   }
 
-  // GET project details (if you have a special endpoint)
-  getDetails(id: string): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/${id}/details`);
+  getProjectReport(projectId: string): Observable<ProjectCostReport> {
+    return this.http.get<ProjectCostReport>(`${this.baseUrl}/${projectId}/report`);
   }
 
-  getProjectReport(projectId: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${projectId}/report`);
+  getProjectFunding(projectId: string): Observable<ProjectFunding> {
+    return this.http.get<ProjectFunding>(`${this.baseUrl}/${projectId}/funding`);
+  }
+
+  generateViewLink(projectId: string): Observable<ViewLinkResponse> {
+    return this.http.post<ViewLinkResponse>(`${this.baseUrl}/${projectId}/view-link`, {});
+  }
+
+  getByViewToken(token: string): Observable<Project> {
+    return this.http.get<Project>(`${this.baseUrl}/view/${token}`);
   }
 }

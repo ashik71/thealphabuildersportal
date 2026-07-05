@@ -1,0 +1,19 @@
+.project-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 360px;
+
+  &__field {
+    width: 100%;
+  }
+
+  &__row {
+    display: flex;
+    gap: 1rem;
+
+    .project-form__field {
+      flex: 1;
+    }
+  }
+}

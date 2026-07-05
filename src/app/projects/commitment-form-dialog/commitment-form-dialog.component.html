@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Add Shareholder Commitment</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content class="form-stack">
+    <mat-form-field appearance="outline" class="form-stack__field">
+      <mat-label>Shareholder</mat-label>
+      <mat-select formControlName="ShareholderId" required>
+        @for (s of shareholders(); track s._id) {
+          <mat-option [value]="s._id">{{ s.Name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-stack__field">
+      <mat-label>Committed Amount</mat-label>
+      <input matInput type="number" formControlName="CommittedAmount" required />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-stack__field">
+      <mat-label>Notes</mat-label>
+      <textarea matInput formControlName="Notes" rows="2"></textarea>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">Cancel</button>
+    <button mat-flat-button color="primary" type="submit">Save</button>
+  </mat-dialog-actions>
+</form>

@@ -1,1 +1,43 @@
-<p>admin-dashboard works!</p>
+<app-page-header title="Dashboard" subtitle="Portfolio overview across all projects"></app-page-header>
+
+@if (loading()) {
+  <div class="dashboard__loading">
+    <mat-spinner diameter="36" />
+  </div>
+} @else {
+  <div class="dashboard__stats">
+    <app-stat-card label="Total Projects" [value]="projectCount().toString()" icon="foundation" tone="primary" />
+    <app-stat-card label="In Progress" [value]="activeCount().toString()" icon="engineering" tone="primary" />
+    <app-stat-card label="Estimated Cost" [value]="(totalEstimated() | number: '1.0-0') ?? '0'" icon="request_quote" />
+    <app-stat-card label="Actual Cost" [value]="(totalActual() | number: '1.0-0') ?? '0'" icon="payments" tone="success" />
+  </div>
+
+  <h2 class="dashboard__section-title">Recent Projects</h2>
+
+  @if (recentProjects().length === 0) {
+    <p class="dashboard__empty">No projects yet. Create your first project to get started.</p>
+  } @else {
+    <div class="dashboard__grid">
+      @for (project of recentProjects(); track project._id) {
+        <mat-card class="dashboard__card" (click)="openProject(project._id)">
+          <mat-card-content>
+            <div class="dashboard__card-header">
+              <h3>{{ project.Name }}</h3>
+              <mat-chip [class]="'status-chip status-chip--' + statusTone(project.Status)">
+                {{ project.Status }}
+              </mat-chip>
+            </div>
+            <p class="dashboard__card-location">
+              <mat-icon inline>location_on</mat-icon>
+              {{ project.Location || 'No location set' }}
+            </p>
+            <div class="dashboard__card-costs">
+              <span>Est. {{ project.EstimatedCost | number: '1.0-0' }}</span>
+              <span>Actual {{ project.ActualCost | number: '1.0-0' }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+}

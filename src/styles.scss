@@ -1,12 +1,42 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+html {
+  color-scheme: light dark;
 
-/* Angular Material baseline tweak */
-html, body { height: 100%; }
-body { @apply bg-gray-50 text-gray-800; font-family: Roboto, "Noto Sans", sans-serif; }
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$orange-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
 
+html,
+body {
+  height: 100%;
+}
 
-.mat-toolbar { @apply shadow-sm; }
+body {
+  margin: 0;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+}
+
+.form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 320px;
+
+  &__field {
+    width: 100%;
+  }
+}

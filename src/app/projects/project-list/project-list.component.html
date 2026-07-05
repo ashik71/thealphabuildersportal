@@ -1,47 +1,69 @@
-<div class="p-6 bg-gray-50 min-h-screen">
-  <div class="flex justify-between items-center mb-4">
-    <h2 class="text-2xl font-semibold text-gray-800">Projects</h2>
-    <button (click)="refresh()"
-            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-      Refresh
-    </button>
-  </div>
+<app-page-header title="Projects" subtitle="All construction projects">
+  <button mat-flat-button color="primary" (click)="openCreateDialog()">
+    <mat-icon>add</mat-icon>
+    New Project
+  </button>
+</app-page-header>
 
-  <div class="overflow-x-auto shadow rounded-lg bg-white">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Summary</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cost Est.</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-200">
-        <tr *ngFor="let p of projects" class="hover:bg-gray-50">
-          <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{p.Name}}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{p.Location}}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{p.Summary}}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-gray-700">{{p.EstimatedCost | number}}</td>
-          <td class="px-6 py-4 whitespace-nowrap space-x-2">
-            <button (click)="openDetails(p._id)"
-                    class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition">
-              Details
-            </button>
-            <button (click)="generateLink(p._id)"
-                    class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition">
-              Generate View Link
-            </button>
-          </td>
-        </tr>
-      </tbody>
+<mat-form-field appearance="outline" class="project-list__search">
+  <mat-label>Search projects</mat-label>
+  <input matInput [value]="searchTerm()" (input)="searchTerm.set($any($event.target).value)" />
+  <mat-icon matSuffix>search</mat-icon>
+</mat-form-field>
+
+@if (loading()) {
+  <div class="project-list__loading">
+    <mat-spinner diameter="36" />
+  </div>
+} @else if (filteredProjects().length === 0) {
+  <p class="project-list__empty">No projects match your search.</p>
+} @else {
+  <div class="project-list__table-wrap">
+    <table mat-table [dataSource]="filteredProjects()" class="project-list__table">
+      <ng-container matColumnDef="Name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let p">{{ p.Name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Location">
+        <th mat-header-cell *matHeaderCellDef>Location</th>
+        <td mat-cell *matCellDef="let p">{{ p.Location || '—' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let p">
+          <mat-chip [class]="'status-chip status-chip--' + statusTone(p.Status)">{{ p.Status }}</mat-chip>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="EstimatedCost">
+        <th mat-header-cell *matHeaderCellDef>Estimated</th>
+        <td mat-cell *matCellDef="let p">{{ p.EstimatedCost | number: '1.0-0' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="ActualCost">
+        <th mat-header-cell *matHeaderCellDef>Actual</th>
+        <td mat-cell *matCellDef="let p">{{ p.ActualCost | number: '1.0-0' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let p">
+          <button mat-icon-button (click)="generateLink(p, $event)" matTooltip="Copy view-only link">
+            <mat-icon>link</mat-icon>
+          </button>
+          <button mat-icon-button (click)="openEditDialog(p, $event)" matTooltip="Edit">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="deleteProject(p, $event)" matTooltip="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openDetails(row._id)"></tr>
     </table>
   </div>
-
-  <div *ngIf="latestLink" class="mt-6 bg-gray-100 p-4 rounded shadow">
-    <p class="mb-2 text-gray-700 font-medium">View-only link (copy & send to customer):</p>
-    <input [value]="latestLink" readonly
-           class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
-  </div>
-</div>
+}

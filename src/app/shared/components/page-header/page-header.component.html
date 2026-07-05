@@ -1,19 +1,20 @@
 <div class="page-header">
-  <div class="left">
-    <button
-      *ngIf="showBack"
-      class="back-btn"
-      type="button"
-      (click)="goBack()"
-    >
-      ←
-    </button>
+  <div class="page-header__left">
+    @if (showBack()) {
+      <button mat-icon-button type="button" aria-label="Go back" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    }
 
-    <h2 class="title">{{ title }}</h2>
+    <div>
+      <h1 class="page-header__title">{{ title() }}</h1>
+      @if (subtitle()) {
+        <p class="page-header__subtitle">{{ subtitle() }}</p>
+      }
+    </div>
   </div>
 
-  <div class="right">
-    <!-- Optional actions -->
+  <div class="page-header__right">
     <ng-content></ng-content>
   </div>
 </div>

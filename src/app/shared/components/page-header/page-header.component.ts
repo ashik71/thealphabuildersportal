@@ -1,17 +1,22 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { Location } from '@angular/common';
+import { inject } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-    selector: 'app-page-header',
-    templateUrl: './page-header.component.html',
-    styleUrls: ['./page-header.component.scss'],
-    standalone: false
+  selector: 'app-page-header',
+  standalone: true,
+  imports: [MatIconModule, MatButtonModule],
+  templateUrl: './page-header.component.html',
+  styleUrl: './page-header.component.scss',
 })
 export class PageHeaderComponent {
-  @Input() title = '';
-  @Input() showBack = true;
+  private readonly location = inject(Location);
 
-  constructor(private location: Location) {}
+  title = input('');
+  subtitle = input('');
+  showBack = input(false);
 
   goBack() {
     this.location.back();

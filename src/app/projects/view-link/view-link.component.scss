@@ -1,0 +1,69 @@
+.view-link-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mat-sys-surface-container-low);
+  padding: 1.5rem;
+
+  &__card {
+    width: 100%;
+    max-width: 480px;
+    padding: 2rem;
+    border-radius: 20px;
+    text-align: center;
+  }
+
+  &__icon {
+    font-size: 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--mat-sys-on-surface-variant);
+    margin-bottom: 0.5rem;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--mat-sys-primary);
+    margin-bottom: 1rem;
+  }
+
+  &__location {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    color: var(--mat-sys-on-surface-variant);
+    margin: 0.25rem 0 1rem;
+  }
+
+  &__summary {
+    color: var(--mat-sys-on-surface-variant);
+    margin-bottom: 1.5rem;
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    text-align: left;
+    border-top: 1px solid var(--mat-sys-outline-variant);
+    padding-top: 1.25rem;
+  }
+
+  &__stat-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  &__stat-value {
+    display: block;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+}

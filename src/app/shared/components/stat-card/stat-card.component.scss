@@ -1,0 +1,49 @@
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 16px;
+  background: var(--mat-sys-surface-container);
+  box-shadow: var(--mat-sys-level1);
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--mat-sys-surface-container-highest);
+    color: var(--mat-sys-primary);
+    flex-shrink: 0;
+  }
+
+  &__label {
+    font-size: 0.8125rem;
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  &__value {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--mat-sys-on-surface);
+    line-height: 1.2;
+  }
+
+  &--primary &__icon {
+    color: var(--mat-sys-primary);
+  }
+
+  &--success &__icon {
+    color: var(--mat-sys-tertiary);
+  }
+
+  &--warn &__value {
+    color: var(--mat-sys-error);
+  }
+
+  &--warn &__icon {
+    color: var(--mat-sys-error);
+  }
+}

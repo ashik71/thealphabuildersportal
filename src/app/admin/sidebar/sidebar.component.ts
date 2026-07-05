@@ -1,9 +1,25 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+
+interface NavItem {
+  path: string;
+  label: string;
+  icon: string;
+}
 
 @Component({
-    selector: 'app-sidebar',
-    imports: [RouterModule],
-    templateUrl: './sidebar.component.html'
+  selector: 'app-sidebar',
+  standalone: true,
+  imports: [RouterLink, RouterLinkActive, MatIconModule, MatListModule],
+  templateUrl: './sidebar.component.html',
+  styleUrl: './sidebar.component.scss',
 })
-export class SidebarComponent {}
+export class SidebarComponent {
+  readonly navItems: NavItem[] = [
+    { path: '/admin/dashboard', label: 'Dashboard', icon: 'space_dashboard' },
+    { path: '/admin/projects', label: 'Projects', icon: 'foundation' },
+    { path: '/admin/shareholders', label: 'Shareholders', icon: 'groups' },
+  ];
+}

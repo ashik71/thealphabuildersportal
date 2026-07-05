@@ -1,0 +1,21 @@
+.shareholder-list {
+  &__loading {
+    display: flex;
+    justify-content: center;
+    padding: 3rem;
+  }
+
+  &__empty {
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  &__table-wrap {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--mat-sys-level1);
+  }
+
+  &__table {
+    width: 100%;
+  }
+}

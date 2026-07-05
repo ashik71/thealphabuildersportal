@@ -1,0 +1,11 @@
+<div class="stat-card" [class]="'stat-card--' + tone()">
+  @if (icon()) {
+    <div class="stat-card__icon">
+      <mat-icon>{{ icon() }}</mat-icon>
+    </div>
+  }
+  <div class="stat-card__body">
+    <div class="stat-card__label">{{ label() }}</div>
+    <div class="stat-card__value">{{ value() }}</div>
+  </div>
+</div>

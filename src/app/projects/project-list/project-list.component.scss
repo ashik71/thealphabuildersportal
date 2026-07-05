@@ -1,0 +1,35 @@
+.project-list {
+  &__search {
+    width: 100%;
+    max-width: 360px;
+    margin-bottom: 1rem;
+  }
+
+  &__loading {
+    display: flex;
+    justify-content: center;
+    padding: 3rem;
+  }
+
+  &__empty {
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  &__table-wrap {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--mat-sys-level1);
+  }
+
+  &__table {
+    width: 100%;
+
+    tr.mat-mdc-row {
+      cursor: pointer;
+
+      &:hover {
+        background: var(--mat-sys-surface-container-highest);
+      }
+    }
+  }
+}

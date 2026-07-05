@@ -1,1 +1,51 @@
-<p>view-link works!</p>
+<div class="view-link-page">
+  @if (loading()) {
+    <mat-spinner diameter="36" />
+  } @else if (error() || !project()) {
+    <mat-card class="view-link-page__card">
+      <mat-icon class="view-link-page__icon">link_off</mat-icon>
+      <h2>Link not available</h2>
+      <p>This view-only link is invalid or has expired. Please request a new link.</p>
+    </mat-card>
+  } @else {
+    <mat-card class="view-link-page__card">
+      <div class="view-link-page__brand">
+        <mat-icon>foundation</mat-icon>
+        Alpha Builders
+      </div>
+
+      <h2>{{ project()!.Name }}</h2>
+      <p class="view-link-page__location">
+        <mat-icon inline>location_on</mat-icon>
+        {{ project()!.Location || 'No location set' }}
+      </p>
+
+      @if (project()!.Summary) {
+        <p class="view-link-page__summary">{{ project()!.Summary }}</p>
+      }
+
+      <div class="view-link-page__stats">
+        <div>
+          <span class="view-link-page__stat-label">Status</span>
+          <span class="view-link-page__stat-value">{{ project()!.Status }}</span>
+        </div>
+        <div>
+          <span class="view-link-page__stat-label">Estimated Cost</span>
+          <span class="view-link-page__stat-value">{{ project()!.EstimatedCost | number: '1.0-0' }}</span>
+        </div>
+        @if (project()!.StartDate) {
+          <div>
+            <span class="view-link-page__stat-label">Start Date</span>
+            <span class="view-link-page__stat-value">{{ project()!.StartDate | date: 'mediumDate' }}</span>
+          </div>
+        }
+        @if (project()!.EndDate) {
+          <div>
+            <span class="view-link-page__stat-label">Target End Date</span>
+            <span class="view-link-page__stat-value">{{ project()!.EndDate | date: 'mediumDate' }}</span>
+          </div>
+        }
+      </div>
+    </mat-card>
+  }
+</div>
