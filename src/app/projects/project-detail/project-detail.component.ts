@@ -3,9 +3,10 @@ import { ProjectService } from '../../services/project.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-project-detail',
-  templateUrl: './project-detail.component.html',
-  styleUrl: './project-detail.component.scss',
+    selector: 'app-project-detail',
+    templateUrl: './project-detail.component.html',
+    styleUrl: './project-detail.component.scss',
+    standalone: false
 })
 export class ProjectDetailComponent {
   projectId!: string;

@@ -4,9 +4,10 @@ import { Router } from '@angular/router';
 import { Project } from '../../interfaces/project.interface';
 
 @Component({
-  selector: 'app-project-list',
-  templateUrl: './project-list.component.html',
-  styleUrl: './project-list.component.scss'
+    selector: 'app-project-list',
+    templateUrl: './project-list.component.html',
+    styleUrl: './project-list.component.scss',
+    standalone: false
 })
 export class ProjectListComponent implements OnInit {
   projects: Project[] = [];
