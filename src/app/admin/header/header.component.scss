@@ -3,12 +3,28 @@
   color: var(--mat-sys-on-surface);
   border-bottom: 1px solid var(--mat-sys-outline-variant);
 
+  &__menu-toggle {
+    display: none;
+    margin-right: 0.25rem;
+
+    @media (max-width: 768px) {
+      display: inline-flex;
+    }
+  }
+
   &__brand {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     font-weight: 600;
     letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+
+  &__brand-text {
+    @media (max-width: 360px) {
+      display: none;
+    }
   }
 
   &__spacer {

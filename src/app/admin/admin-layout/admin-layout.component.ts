@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { HeaderComponent } from '../header/header.component';
+import { LayoutService } from '../../services/layout.service';
 
 @Component({
   selector: 'app-admin-layout',
@@ -10,4 +11,6 @@ import { HeaderComponent } from '../header/header.component';
   templateUrl: './admin-layout.component.html',
   styleUrl: './admin-layout.component.scss',
 })
-export class AdminLayoutComponent {}
+export class AdminLayoutComponent {
+  readonly layout = inject(LayoutService);
+}

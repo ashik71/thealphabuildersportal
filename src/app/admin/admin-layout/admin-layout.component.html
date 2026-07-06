@@ -2,6 +2,10 @@
   <app-header></app-header>
 
   <div class="admin-layout__body">
+    @if (layout.sidebarOpen()) {
+      <div class="admin-layout__backdrop" (click)="layout.closeSidebar()"></div>
+    }
+
     <app-sidebar></app-sidebar>
 
     <main class="admin-layout__content">

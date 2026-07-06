@@ -4,6 +4,10 @@
   gap: 0.25rem;
   min-width: 360px;
 
+  @media (max-width: 480px) {
+    min-width: 0;
+  }
+
   &__field {
     width: 100%;
   }
@@ -11,6 +15,11 @@
   &__row {
     display: flex;
     gap: 1rem;
+
+    @media (max-width: 480px) {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
 
     .project-form__field {
       flex: 1;

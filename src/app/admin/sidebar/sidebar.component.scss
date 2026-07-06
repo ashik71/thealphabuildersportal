@@ -6,6 +6,22 @@
   border-right: 1px solid var(--mat-sys-outline-variant);
   padding: 1rem 0.75rem;
 
+  @media (max-width: 768px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 260px;
+    max-width: 80vw;
+    transform: translateX(-100%);
+    box-shadow: var(--mat-sys-level3);
+    transition: transform 0.2s ease;
+
+    &--open {
+      transform: translateX(0);
+    }
+  }
+
   &__nav {
     display: flex;
     flex-direction: column;

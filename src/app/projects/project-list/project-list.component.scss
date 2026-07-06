@@ -17,12 +17,15 @@
 
   &__table-wrap {
     border-radius: 16px;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
     box-shadow: var(--mat-sys-level1);
   }
 
   &__table {
     width: 100%;
+    min-width: 640px;
 
     tr.mat-mdc-row {
       cursor: pointer;

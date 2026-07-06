@@ -1,7 +1,16 @@
 <mat-toolbar class="app-header">
+  <button
+    mat-icon-button
+    class="app-header__menu-toggle"
+    aria-label="Toggle navigation menu"
+    (click)="layout.toggleSidebar()"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+
   <span class="app-header__brand">
     <mat-icon>foundation</mat-icon>
-    Alpha Builders
+    <span class="app-header__brand-text">Alpha Builders</span>
   </span>
 
   <span class="app-header__spacer"></span>
