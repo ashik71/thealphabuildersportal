@@ -1,15 +1,27 @@
-<h2 mat-dialog-title>Add Expense</h2>
+<h2 mat-dialog-title>{{ data.expense ? 'Edit Expense' : 'Add Expense' }}</h2>
 
 <form [formGroup]="form" (ngSubmit)="save()">
   <mat-dialog-content class="form-stack">
     <mat-form-field appearance="outline" class="form-stack__field">
       <mat-label>Cost Category</mat-label>
-      <mat-select formControlName="CostCategoryId" required>
+      <mat-select formControlName="CostCategoryId" required (selectionChange)="onCategoryChange()">
         @for (c of topLevelCategories(); track c._id) {
           <mat-option [value]="c._id">{{ c.Name }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
+
+    @if (subcategoryOptions().length > 0) {
+      <mat-form-field appearance="outline" class="form-stack__field">
+        <mat-label>Sub-Category</mat-label>
+        <mat-select formControlName="SubCategoryId">
+          <mat-option value="">None</mat-option>
+          @for (c of subcategoryOptions(); track c._id) {
+            <mat-option [value]="c._id">{{ c.Name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
 
     <mat-form-field appearance="outline" class="form-stack__field">
       <mat-label>Description</mat-label>

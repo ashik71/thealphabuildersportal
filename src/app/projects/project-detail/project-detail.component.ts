@@ -20,6 +20,7 @@ import { PaymentFormDialogComponent } from '../payment-form-dialog/payment-form-
 import { ExpenseFormDialogComponent } from '../expense-form-dialog/expense-form-dialog.component';
 import { Project, ProjectCostReport } from '../../interfaces/project.interface';
 import { Commitment, Payment, ProjectFunding } from '../../interfaces/funding.interface';
+import { Expense } from '../../interfaces/expense.interface';
 
 @Component({
   selector: 'app-project-detail',
@@ -56,10 +57,17 @@ export class ProjectDetailComponent {
   readonly funding = signal<ProjectFunding | null>(null);
   readonly commitments = signal<Commitment[]>([]);
   readonly payments = signal<Payment[]>([]);
+  readonly expenses = signal<Expense[]>([]);
 
   readonly commitmentColumns = ['shareholder', 'amount', 'notes', 'actions'];
   readonly paymentColumns = ['shareholder', 'amount', 'date', 'notes', 'actions'];
   readonly expenseColumns = ['category', 'subcategory', 'estimated', 'actual'];
+  readonly expenseRowColumns = ['date', 'category', 'subcategory', 'description', 'amount', 'paidTo', 'actions'];
+
+  readonly reportExpenseColumns = ['date', 'category', 'subcategory', 'description', 'amount', 'paidTo'];
+  readonly reportCommitmentColumns = ['shareholder', 'amount', 'notes'];
+  readonly reportPaymentColumns = ['shareholder', 'amount', 'date', 'notes'];
+  readonly shareholderSummaryColumns = ['shareholder', 'committed', 'paid', 'remaining'];
 
   constructor() {
     this.loadAll();
@@ -70,6 +78,11 @@ export class ProjectDetailComponent {
     this.projectService.getById(this.projectId).subscribe((p) => this.project.set(p));
     this.loadReport();
     this.loadFunding();
+    this.loadExpenses();
+  }
+
+  private loadExpenses() {
+    this.expenseService.getByProject(this.projectId).subscribe((e) => this.expenses.set(e));
   }
 
   private loadReport() {
@@ -92,9 +105,26 @@ export class ProjectDetailComponent {
     this.router.navigate(['/admin/projects']);
   }
 
+  downloadReport() {
+    this.projectService.exportReport(this.projectId).subscribe((blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${this.project()?.Name || 'project'}_report.xlsx`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
   shareholderName(shareholderId: Commitment['ShareholderId']) {
     if (typeof shareholderId === 'string') return shareholderId;
     return shareholderId?.Name ?? 'Unknown';
+  }
+
+  categoryName(categoryId: Expense['CostCategoryId'] | Expense['SubCategoryId']) {
+    if (!categoryId) return null;
+    if (typeof categoryId === 'string') return categoryId;
+    return categoryId.Name ?? 'Unknown';
   }
 
   addCommitment() {
@@ -146,6 +176,32 @@ export class ProjectDetailComponent {
       this.expenseService.create(payload).subscribe(() => {
         this.snackBar.open('Expense added', 'Dismiss', { duration: 3000 });
         this.loadReport();
+        this.loadExpenses();
+      });
+    });
+  }
+
+  editExpense(expense: Expense) {
+    const dialogRef = this.dialog.open(ExpenseFormDialogComponent, { data: { projectId: this.projectId, expense } });
+    dialogRef.afterClosed().subscribe((payload) => {
+      if (!payload) return;
+      this.expenseService.update(expense._id, payload).subscribe(() => {
+        this.snackBar.open('Expense updated', 'Dismiss', { duration: 3000 });
+        this.loadReport();
+        this.loadExpenses();
+      });
+    });
+  }
+
+  deleteExpense(expense: Expense) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: { title: 'Delete Expense', message: 'Remove this expense record?', confirmLabel: 'Delete', danger: true },
+    });
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (!confirmed) return;
+      this.expenseService.delete(expense._id).subscribe(() => {
+        this.loadReport();
+        this.loadExpenses();
       });
     });
   }

@@ -1,0 +1,62 @@
+<app-page-header title="Cost Categories" subtitle="Organize project costs into categories and sub-categories">
+  <button mat-flat-button color="primary" (click)="openCreateDialog()">
+    <mat-icon>add</mat-icon>
+    New Category
+  </button>
+</app-page-header>
+
+@if (loading()) {
+  <div class="cost-category-list__loading">
+    <mat-spinner diameter="36" />
+  </div>
+} @else if (topLevelCategories().length === 0) {
+  <p class="cost-category-list__empty">No cost categories yet. Add one to start organizing expenses.</p>
+} @else {
+  @for (category of topLevelCategories(); track category._id) {
+    <div class="cost-category-list__group">
+      <div class="cost-category-list__row">
+        <div class="cost-category-list__info">
+          <span class="cost-category-list__name">{{ category.Name }}</span>
+          @if (category.Description) {
+            <span class="cost-category-list__description">{{ category.Description }}</span>
+          }
+        </div>
+        <div class="cost-category-list__actions">
+          <button mat-icon-button (click)="openCreateDialog(category)" matTooltip="Add sub-category">
+            <mat-icon>add</mat-icon>
+          </button>
+          <button mat-icon-button (click)="openEditDialog(category)" matTooltip="Edit">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="deleteCategory(category)" matTooltip="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      @let subcategories = childrenOf(category._id);
+      @if (subcategories.length > 0) {
+        <ul class="cost-category-list__subcategories">
+          @for (sub of subcategories; track sub._id) {
+            <li class="cost-category-list__row cost-category-list__row--sub">
+              <div class="cost-category-list__info">
+                <span class="cost-category-list__name">{{ sub.Name }}</span>
+                @if (sub.Description) {
+                  <span class="cost-category-list__description">{{ sub.Description }}</span>
+                }
+              </div>
+              <div class="cost-category-list__actions">
+                <button mat-icon-button (click)="openEditDialog(sub)" matTooltip="Edit">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deleteCategory(sub)" matTooltip="Delete">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  }
+}

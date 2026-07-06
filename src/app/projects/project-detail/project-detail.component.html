@@ -1,4 +1,8 @@
 <app-page-header [title]="project()?.Name || 'Project'" [subtitle]="project()?.Location || ''" [showBack]="true">
+  <button mat-stroked-button (click)="downloadReport()">
+    <mat-icon>download</mat-icon>
+    Download Excel
+  </button>
   <button mat-stroked-button (click)="addExpense()">
     <mat-icon>add</mat-icon>
     Add Expense
@@ -51,6 +55,54 @@
           @if (report()!.Breakdown.length === 0) {
             <p class="project-detail__empty">No expenses logged yet.</p>
           }
+        </div>
+      }
+    </mat-tab>
+
+    <mat-tab label="Expenses">
+      @if (expenses().length === 0) {
+        <p class="project-detail__empty">No expenses logged yet.</p>
+      } @else {
+        <div class="project-detail__table-wrap">
+          <table mat-table [dataSource]="expenses()" class="project-detail__table">
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>Date</th>
+              <td mat-cell *matCellDef="let e">{{ e.Date | date: 'mediumDate' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="category">
+              <th mat-header-cell *matHeaderCellDef>Category</th>
+              <td mat-cell *matCellDef="let e">{{ categoryName(e.CostCategoryId) }}</td>
+            </ng-container>
+            <ng-container matColumnDef="subcategory">
+              <th mat-header-cell *matHeaderCellDef>Subcategory</th>
+              <td mat-cell *matCellDef="let e">{{ categoryName(e.SubCategoryId) || '—' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef>Description</th>
+              <td mat-cell *matCellDef="let e">{{ e.Description || '—' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef>Amount</th>
+              <td mat-cell *matCellDef="let e">{{ e.Amount | number: '1.0-0' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="paidTo">
+              <th mat-header-cell *matHeaderCellDef>Paid To</th>
+              <td mat-cell *matCellDef="let e">{{ e.PaidTo || '—' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let e">
+                <button mat-icon-button (click)="editExpense(e)" matTooltip="Edit">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="deleteExpense(e)" matTooltip="Delete">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="expenseRowColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: expenseRowColumns"></tr>
+          </table>
         </div>
       }
     </mat-tab>
@@ -144,6 +196,174 @@
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="paymentColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: paymentColumns"></tr>
+          </table>
+        </div>
+      }
+    </mat-tab>
+
+    <mat-tab label="Full Report">
+      <div class="project-detail__funding-actions">
+        <button mat-flat-button color="primary" (click)="downloadReport()">
+          <mat-icon>download</mat-icon>
+          Download Excel
+        </button>
+      </div>
+
+      @if (report()) {
+        <div class="project-detail__stats">
+          <app-stat-card label="Estimated Cost" [value]="report()!.Summary.EstimatedTotal | number: '1.0-0'" icon="request_quote" />
+          <app-stat-card label="Actual Cost" [value]="report()!.Summary.ActualTotal | number: '1.0-0'" icon="payments" tone="success" />
+          <app-stat-card
+            label="Difference"
+            [value]="report()!.Summary.Difference | number: '1.0-0'"
+            icon="balance"
+            [tone]="report()!.Summary.Difference < 0 ? 'warn' : 'neutral'"
+          />
+        </div>
+      }
+
+      <h3 class="project-detail__section-title">Cost Breakdown</h3>
+      @if (!report() || report()!.Breakdown.length === 0) {
+        <p class="project-detail__empty">No expenses logged yet.</p>
+      } @else {
+        <div class="project-detail__table-wrap">
+          <table mat-table [dataSource]="report()!.Breakdown" class="project-detail__table">
+            <ng-container matColumnDef="category">
+              <th mat-header-cell *matHeaderCellDef>Category</th>
+              <td mat-cell *matCellDef="let item">{{ item.CategoryName }}</td>
+            </ng-container>
+            <ng-container matColumnDef="subcategory">
+              <th mat-header-cell *matHeaderCellDef>Subcategory</th>
+              <td mat-cell *matCellDef="let item">{{ item.SubcategoryName || '—' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="estimated">
+              <th mat-header-cell *matHeaderCellDef>Estimated</th>
+              <td mat-cell *matCellDef="let item">{{ item.EstimatedCost | number: '1.0-0' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="actual">
+              <th mat-header-cell *matHeaderCellDef>Actual</th>
+              <td mat-cell *matCellDef="let item">{{ item.ActualCost | number: '1.0-0' }}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="expenseColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: expenseColumns"></tr>
+          </table>
+        </div>
+      }
+
+      <h3 class="project-detail__section-title">Expenses</h3>
+      @if (expenses().length === 0) {
+        <p class="project-detail__empty">No expenses logged yet.</p>
+      } @else {
+        <div class="project-detail__table-wrap">
+          <table mat-table [dataSource]="expenses()" class="project-detail__table">
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>Date</th>
+              <td mat-cell *matCellDef="let e">{{ e.Date | date: 'mediumDate' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="category">
+              <th mat-header-cell *matHeaderCellDef>Category</th>
+              <td mat-cell *matCellDef="let e">{{ categoryName(e.CostCategoryId) }}</td>
+            </ng-container>
+            <ng-container matColumnDef="subcategory">
+              <th mat-header-cell *matHeaderCellDef>Subcategory</th>
+              <td mat-cell *matCellDef="let e">{{ categoryName(e.SubCategoryId) || '—' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef>Description</th>
+              <td mat-cell *matCellDef="let e">{{ e.Description || '—' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef>Amount</th>
+              <td mat-cell *matCellDef="let e">{{ e.Amount | number: '1.0-0' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="paidTo">
+              <th mat-header-cell *matHeaderCellDef>Paid To</th>
+              <td mat-cell *matCellDef="let e">{{ e.PaidTo || '—' }}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="reportExpenseColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: reportExpenseColumns"></tr>
+          </table>
+        </div>
+      }
+
+      <h3 class="project-detail__section-title">Commitments</h3>
+      @if (commitments().length === 0) {
+        <p class="project-detail__empty">No commitments recorded yet.</p>
+      } @else {
+        <div class="project-detail__table-wrap">
+          <table mat-table [dataSource]="commitments()" class="project-detail__table">
+            <ng-container matColumnDef="shareholder">
+              <th mat-header-cell *matHeaderCellDef>Shareholder</th>
+              <td mat-cell *matCellDef="let c">{{ shareholderName(c.ShareholderId) }}</td>
+            </ng-container>
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef>Committed</th>
+              <td mat-cell *matCellDef="let c">{{ c.CommittedAmount | number: '1.0-0' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="notes">
+              <th mat-header-cell *matHeaderCellDef>Notes</th>
+              <td mat-cell *matCellDef="let c">{{ c.Notes || '—' }}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="reportCommitmentColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: reportCommitmentColumns"></tr>
+          </table>
+        </div>
+      }
+
+      <h3 class="project-detail__section-title">Payments</h3>
+      @if (payments().length === 0) {
+        <p class="project-detail__empty">No payments recorded yet.</p>
+      } @else {
+        <div class="project-detail__table-wrap">
+          <table mat-table [dataSource]="payments()" class="project-detail__table">
+            <ng-container matColumnDef="shareholder">
+              <th mat-header-cell *matHeaderCellDef>Shareholder</th>
+              <td mat-cell *matCellDef="let p">{{ shareholderName(p.ShareholderId) }}</td>
+            </ng-container>
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef>Amount</th>
+              <td mat-cell *matCellDef="let p">{{ p.AmountPaid | number: '1.0-0' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>Date</th>
+              <td mat-cell *matCellDef="let p">{{ p.Date | date: 'mediumDate' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="notes">
+              <th mat-header-cell *matHeaderCellDef>Notes</th>
+              <td mat-cell *matCellDef="let p">{{ p.Notes || '—' }}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="reportPaymentColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: reportPaymentColumns"></tr>
+          </table>
+        </div>
+      }
+
+      <h3 class="project-detail__section-title">Shareholder Summary</h3>
+      @if (!funding() || funding()!.Shareholders.length === 0) {
+        <p class="project-detail__empty">No shareholder activity yet.</p>
+      } @else {
+        <div class="project-detail__table-wrap">
+          <table mat-table [dataSource]="funding()!.Shareholders" class="project-detail__table">
+            <ng-container matColumnDef="shareholder">
+              <th mat-header-cell *matHeaderCellDef>Shareholder</th>
+              <td mat-cell *matCellDef="let s">{{ s.ShareholderName || 'Unknown' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="committed">
+              <th mat-header-cell *matHeaderCellDef>Committed</th>
+              <td mat-cell *matCellDef="let s">{{ s.Committed | number: '1.0-0' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="paid">
+              <th mat-header-cell *matHeaderCellDef>Paid</th>
+              <td mat-cell *matCellDef="let s">{{ s.Paid | number: '1.0-0' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="remaining">
+              <th mat-header-cell *matHeaderCellDef>Remaining</th>
+              <td mat-cell *matCellDef="let s" [class.project-detail__over-budget]="s.Remaining < 0">
+                {{ s.Remaining | number: '1.0-0' }}
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="shareholderSummaryColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: shareholderSummaryColumns"></tr>
           </table>
         </div>
       }

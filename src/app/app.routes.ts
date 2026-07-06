@@ -39,6 +39,13 @@ export const routes: Routes = [
             (m) => m.ShareholderListComponent
           ),
       },
+      {
+        path: 'cost-categories',
+        loadComponent: () =>
+          import('./cost-categories/cost-category-list/cost-category-list.component').then(
+            (m) => m.CostCategoryListComponent
+          ),
+      },
     ],
   },
   { path: '', pathMatch: 'full', redirectTo: 'login' },

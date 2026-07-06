@@ -38,6 +38,10 @@ export class ProjectService {
     return this.http.get<ProjectFunding>(`${this.baseUrl}/${projectId}/funding`);
   }
 
+  exportReport(projectId: string): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/${projectId}/report/export`, { responseType: 'blob' });
+  }
+
   generateViewLink(projectId: string): Observable<ViewLinkResponse> {
     return this.http.post<ViewLinkResponse>(`${this.baseUrl}/${projectId}/view-link`, {});
   }
