@@ -1,6 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -45,9 +44,8 @@ export class ProjectListComponent {
   readonly displayedColumns = ['Name', 'Location', 'Status', 'EstimatedCost', 'ActualCost', 'actions'];
   readonly loading = signal(true);
   readonly searchTerm = signal('');
-  private readonly refreshTrigger = signal(0);
 
-  private readonly projects = toSignal(this.projectService.getAll(), { initialValue: [] as Project[] });
+  private readonly projects = signal<Project[]>([]);
 
   readonly filteredProjects = computed(() => {
     const term = this.searchTerm().trim().toLowerCase();
@@ -65,7 +63,10 @@ export class ProjectListComponent {
   refresh() {
     this.loading.set(true);
     this.projectService.getAll().subscribe({
-      next: () => this.loading.set(false),
+      next: (list) => {
+        this.projects.set(list);
+        this.loading.set(false);
+      },
       error: () => this.loading.set(false),
     });
   }

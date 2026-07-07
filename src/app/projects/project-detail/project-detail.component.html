@@ -174,6 +174,14 @@
               <th mat-header-cell *matHeaderCellDef>Shareholder</th>
               <td mat-cell *matCellDef="let p">{{ shareholderName(p.ShareholderId) }}</td>
             </ng-container>
+            <ng-container matColumnDef="category">
+              <th mat-header-cell *matHeaderCellDef>Category</th>
+              <td mat-cell *matCellDef="let p">{{ categoryName(p.CostCategoryId) || 'General' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="subcategory">
+              <th mat-header-cell *matHeaderCellDef>Subcategory</th>
+              <td mat-cell *matCellDef="let p">{{ categoryName(p.SubCategoryId) || '—' }}</td>
+            </ng-container>
             <ng-container matColumnDef="amount">
               <th mat-header-cell *matHeaderCellDef>Amount</th>
               <td mat-cell *matCellDef="let p">{{ p.AmountPaid | number: '1.0-0' }}</td>
@@ -320,6 +328,14 @@
               <th mat-header-cell *matHeaderCellDef>Shareholder</th>
               <td mat-cell *matCellDef="let p">{{ shareholderName(p.ShareholderId) }}</td>
             </ng-container>
+            <ng-container matColumnDef="category">
+              <th mat-header-cell *matHeaderCellDef>Category</th>
+              <td mat-cell *matCellDef="let p">{{ categoryName(p.CostCategoryId) || 'General' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="subcategory">
+              <th mat-header-cell *matHeaderCellDef>Subcategory</th>
+              <td mat-cell *matCellDef="let p">{{ categoryName(p.SubCategoryId) || '—' }}</td>
+            </ng-container>
             <ng-container matColumnDef="amount">
               <th mat-header-cell *matHeaderCellDef>Amount</th>
               <td mat-cell *matCellDef="let p">{{ p.AmountPaid | number: '1.0-0' }}</td>
@@ -364,6 +380,34 @@
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="shareholderSummaryColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: shareholderSummaryColumns"></tr>
+          </table>
+        </div>
+      }
+
+      <h3 class="project-detail__section-title">Shareholder Payments by Category</h3>
+      @if (shareholderCategoryRows().length === 0) {
+        <p class="project-detail__empty">No categorized payments yet.</p>
+      } @else {
+        <div class="project-detail__table-wrap">
+          <table mat-table [dataSource]="shareholderCategoryRows()" class="project-detail__table">
+            <ng-container matColumnDef="shareholder">
+              <th mat-header-cell *matHeaderCellDef>Shareholder</th>
+              <td mat-cell *matCellDef="let r">{{ r.shareholder }}</td>
+            </ng-container>
+            <ng-container matColumnDef="category">
+              <th mat-header-cell *matHeaderCellDef>Category</th>
+              <td mat-cell *matCellDef="let r">{{ r.category }}</td>
+            </ng-container>
+            <ng-container matColumnDef="subcategory">
+              <th mat-header-cell *matHeaderCellDef>Subcategory</th>
+              <td mat-cell *matCellDef="let r">{{ r.subcategory }}</td>
+            </ng-container>
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef>Amount Paid</th>
+              <td mat-cell *matCellDef="let r">{{ r.amount | number: '1.0-0' }}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="shareholderCategoryColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: shareholderCategoryColumns"></tr>
           </table>
         </div>
       }

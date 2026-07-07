@@ -54,7 +54,12 @@ export class LoginComponent {
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: (user) => {
-          this.router.navigate([user.isAdmin ? '/admin' : '/login']);
+          if (!user.isAdmin) {
+            this.auth.logout();
+            this.errorMessage.set('This account does not have admin access.');
+            return;
+          }
+          this.router.navigate(['/admin']);
         },
         error: () => {
           this.errorMessage.set('Invalid email or password.');

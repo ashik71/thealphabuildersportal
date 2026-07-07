@@ -6,7 +6,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { Project, ProjectInput, ProjectStatus } from '../../interfaces/project.interface';
 
 export interface ProjectFormDialogData {
@@ -24,7 +23,6 @@ export interface ProjectFormDialogData {
     MatSelectModule,
     MatButtonModule,
     MatDatepickerModule,
-    MatNativeDateModule,
   ],
   templateUrl: './project-form-dialog.component.html',
   styleUrl: './project-form-dialog.component.scss',

@@ -1,4 +1,10 @@
 .shareholder-list {
+  &__filter {
+    width: 100%;
+    max-width: 280px;
+    margin-bottom: 1rem;
+  }
+
   &__loading {
     display: flex;
     justify-content: center;
@@ -20,5 +26,9 @@
   &__table {
     width: 100%;
     min-width: 480px;
+
+    mat-chip {
+      margin: 2px;
+    }
   }
 }

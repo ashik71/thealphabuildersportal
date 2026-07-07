@@ -1,4 +1,5 @@
 import { Shareholder } from './shareholder.interface';
+import { CostCategory } from './expense.interface';
 
 export interface Commitment {
   _id: string;
@@ -20,7 +21,8 @@ export interface Payment {
   _id: string;
   ProjectId: string;
   ShareholderId: Shareholder | string;
-  CostCategoryId?: string | null;
+  CostCategoryId?: CostCategory | string | null;
+  SubCategoryId?: CostCategory | string | null;
   AmountPaid: number;
   Date?: string;
   Notes?: string;
@@ -30,8 +32,18 @@ export interface Payment {
 export interface PaymentInput {
   ProjectId: string;
   ShareholderId: string;
+  CostCategoryId?: string | null;
+  SubCategoryId?: string | null;
   AmountPaid: number;
   Notes?: string;
+}
+
+export interface ShareholderCategorySpend {
+  CategoryId: string | null;
+  CategoryName: string;
+  SubCategoryId: string | null;
+  SubCategoryName: string | null;
+  Amount: number;
 }
 
 export interface ShareholderFunding {
@@ -40,6 +52,7 @@ export interface ShareholderFunding {
   Committed: number;
   Paid: number;
   Remaining: number;
+  Categories: ShareholderCategorySpend[];
 }
 
 export interface ProjectFunding {

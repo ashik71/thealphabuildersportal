@@ -1,6 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -33,7 +32,7 @@ export class AdminDashboardComponent {
   private readonly router = inject(Router);
 
   readonly loading = signal(true);
-  private readonly projects = toSignal(this.projectService.getAll(), { initialValue: [] as Project[] });
+  private readonly projects = signal<Project[]>([]);
 
   readonly projectCount = computed(() => this.projects().length);
   readonly totalEstimated = computed(() => this.projects().reduce((sum, p) => sum + (p.EstimatedCost || 0), 0));
@@ -43,7 +42,18 @@ export class AdminDashboardComponent {
   readonly recentProjects = computed(() => this.projects().slice(0, 6));
 
   constructor() {
-    this.projectService.getAll().subscribe(() => this.loading.set(false));
+    this.refresh();
+  }
+
+  refresh() {
+    this.loading.set(true);
+    this.projectService.getAll().subscribe({
+      next: (list) => {
+        this.projects.set(list);
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false),
+    });
   }
 
   openProject(id: string) {

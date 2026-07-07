@@ -12,6 +12,28 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="form-stack__field">
+      <mat-label>Cost Category</mat-label>
+      <mat-select formControlName="CostCategoryId" (selectionChange)="onCategoryChange()">
+        <mat-option value="">General / Unallocated</mat-option>
+        @for (c of topLevelCategories(); track c._id) {
+          <mat-option [value]="c._id">{{ c.Name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (subcategoryOptions().length > 0) {
+      <mat-form-field appearance="outline" class="form-stack__field">
+        <mat-label>Sub-Category</mat-label>
+        <mat-select formControlName="SubCategoryId">
+          <mat-option value="">None</mat-option>
+          @for (c of subcategoryOptions(); track c._id) {
+            <mat-option [value]="c._id">{{ c.Name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+
+    <mat-form-field appearance="outline" class="form-stack__field">
       <mat-label>Amount Paid</mat-label>
       <input matInput type="number" formControlName="AmountPaid" required />
     </mat-form-field>

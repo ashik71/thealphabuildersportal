@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -60,14 +60,27 @@ export class ProjectDetailComponent {
   readonly expenses = signal<Expense[]>([]);
 
   readonly commitmentColumns = ['shareholder', 'amount', 'notes', 'actions'];
-  readonly paymentColumns = ['shareholder', 'amount', 'date', 'notes', 'actions'];
+  readonly paymentColumns = ['shareholder', 'category', 'subcategory', 'amount', 'date', 'notes', 'actions'];
   readonly expenseColumns = ['category', 'subcategory', 'estimated', 'actual'];
   readonly expenseRowColumns = ['date', 'category', 'subcategory', 'description', 'amount', 'paidTo', 'actions'];
 
   readonly reportExpenseColumns = ['date', 'category', 'subcategory', 'description', 'amount', 'paidTo'];
   readonly reportCommitmentColumns = ['shareholder', 'amount', 'notes'];
-  readonly reportPaymentColumns = ['shareholder', 'amount', 'date', 'notes'];
+  readonly reportPaymentColumns = ['shareholder', 'category', 'subcategory', 'amount', 'date', 'notes'];
   readonly shareholderSummaryColumns = ['shareholder', 'committed', 'paid', 'remaining'];
+  readonly shareholderCategoryColumns = ['shareholder', 'category', 'subcategory', 'amount'];
+
+  readonly shareholderCategoryRows = computed(() => {
+    const shareholders = this.funding()?.Shareholders ?? [];
+    return shareholders.flatMap((s) =>
+      (s.Categories ?? []).map((c) => ({
+        shareholder: s.ShareholderName || 'Unknown',
+        category: c.CategoryName,
+        subcategory: c.SubCategoryName || '—',
+        amount: c.Amount,
+      }))
+    );
+  });
 
   constructor() {
     this.loadAll();

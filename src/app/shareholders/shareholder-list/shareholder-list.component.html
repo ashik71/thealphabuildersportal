@@ -5,15 +5,27 @@
   </button>
 </app-page-header>
 
+<mat-form-field appearance="outline" class="shareholder-list__filter">
+  <mat-label>Filter by project</mat-label>
+  <mat-select [value]="projectFilter()" (selectionChange)="projectFilter.set($event.value)">
+    <mat-option value="">All projects</mat-option>
+    @for (p of projects(); track p._id) {
+      <mat-option [value]="p._id">{{ p.Name }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+
 @if (loading()) {
   <div class="shareholder-list__loading">
     <mat-spinner diameter="36" />
   </div>
 } @else if (shareholders().length === 0) {
   <p class="shareholder-list__empty">No shareholders yet. Add one to start tracking commitments and payments.</p>
+} @else if (filteredShareholders().length === 0) {
+  <p class="shareholder-list__empty">No shareholders found for this project.</p>
 } @else {
   <div class="shareholder-list__table-wrap">
-    <table mat-table [dataSource]="shareholders()" class="shareholder-list__table">
+    <table mat-table [dataSource]="filteredShareholders()" class="shareholder-list__table">
       <ng-container matColumnDef="Name">
         <th mat-header-cell *matHeaderCellDef>Name</th>
         <td mat-cell *matCellDef="let s">{{ s.Name }}</td>
@@ -27,6 +39,20 @@
       <ng-container matColumnDef="Email">
         <th mat-header-cell *matHeaderCellDef>Email</th>
         <td mat-cell *matCellDef="let s">{{ s.Email || '—' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Projects">
+        <th mat-header-cell *matHeaderCellDef>Projects</th>
+        <td mat-cell *matCellDef="let s">
+          @if ((s.Projects ?? []).length === 0) {
+            —
+          } @else {
+            <mat-chip>{{ s.Projects[0].ProjectName }}</mat-chip>
+            @if (s.Projects.length > 1) {
+              <mat-chip [matTooltip]="extraProjectNames(s.Projects)">+{{ s.Projects.length - 1 }}</mat-chip>
+            }
+          }
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
