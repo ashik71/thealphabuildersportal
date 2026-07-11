@@ -1,0 +1,118 @@
+<div class="sh-view">
+  @if (loading()) {
+    <div class="sh-view__loading">
+      <mat-spinner diameter="40" />
+    </div>
+  } @else if (error() || !data()) {
+    <div class="sh-view__center">
+      <mat-card class="sh-view__error-card">
+        <mat-icon class="sh-view__error-icon">link_off</mat-icon>
+        <h2>Link not available</h2>
+        <p>
+          @if (errorStatus() === 410) {
+            This share link has expired. Please ask Alpha Builders for a new one.
+          } @else {
+            This share link is invalid. Please ask Alpha Builders for a new one.
+          }
+        </p>
+      </mat-card>
+    </div>
+  } @else {
+    <div class="sh-view__hero">
+      <div class="sh-view__hero-inner">
+        <div class="sh-view__brand">
+          <mat-icon>foundation</mat-icon>
+          <span>Alpha Builders</span>
+        </div>
+        <mat-chip-set>
+          <mat-chip class="sh-view__status-chip">{{ data()!.ProjectStatus }}</mat-chip>
+        </mat-chip-set>
+        <h1 class="sh-view__project-name">{{ data()!.ProjectName }}</h1>
+        @if (data()!.ProjectLocation) {
+          <p class="sh-view__location">
+            <mat-icon inline>location_on</mat-icon>
+            {{ data()!.ProjectLocation }}
+          </p>
+        }
+        <p class="sh-view__welcome">Cost breakdown for <strong>{{ data()!.ShareholderName }}</strong></p>
+      </div>
+    </div>
+
+    <div class="sh-view__body">
+      <mat-card class="sh-view__progress-card">
+        <div class="sh-view__progress-header">
+          <span class="sh-view__progress-label">Funding Progress</span>
+          <span class="sh-view__progress-percent">{{ paidPercent() }}%</span>
+        </div>
+        <mat-progress-bar
+          mode="determinate"
+          [value]="paidPercent()"
+          [color]="isOverpaid() ? 'warn' : 'primary'"
+        />
+
+        <div class="sh-view__stats">
+          <div class="sh-view__stat">
+            <mat-icon class="sh-view__stat-icon">handshake</mat-icon>
+            <div>
+              <span class="sh-view__stat-label">Committed</span>
+              <span class="sh-view__stat-value">{{ data()!.Committed | number: '1.0-0' }}</span>
+            </div>
+          </div>
+          <div class="sh-view__stat">
+            <mat-icon class="sh-view__stat-icon sh-view__stat-icon--success">payments</mat-icon>
+            <div>
+              <span class="sh-view__stat-label">Paid</span>
+              <span class="sh-view__stat-value">{{ data()!.Paid | number: '1.0-0' }}</span>
+            </div>
+          </div>
+          <div class="sh-view__stat">
+            <mat-icon class="sh-view__stat-icon" [class.sh-view__stat-icon--warn]="isOverpaid()">
+              account_balance_wallet
+            </mat-icon>
+            <div>
+              <span class="sh-view__stat-label">Remaining</span>
+              <span class="sh-view__stat-value" [class.sh-view__stat-value--warn]="isOverpaid()">
+                {{ data()!.Remaining | number: '1.0-0' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+
+      <div class="sh-view__section-header">
+        <h2>Spending by Category</h2>
+      </div>
+
+      @if (data()!.Categories.length === 0) {
+        <mat-card class="sh-view__empty-card">
+          <mat-icon>inbox</mat-icon>
+          <p>No categorized payments recorded yet.</p>
+        </mat-card>
+      } @else {
+        <div class="sh-view__category-grid">
+          @for (c of data()!.Categories; track c.CategoryName + (c.SubCategoryName || '')) {
+            <mat-card class="sh-view__category-card">
+              <div class="sh-view__category-name">{{ c.CategoryName }}</div>
+              @if (c.SubCategoryName) {
+                <div class="sh-view__category-sub">{{ c.SubCategoryName }}</div>
+              }
+              <div class="sh-view__category-amount">{{ c.Amount | number: '1.0-0' }}</div>
+            </mat-card>
+          }
+        </div>
+      }
+
+      <div class="sh-view__download">
+        <button mat-flat-button color="primary" [disabled]="downloading()" (click)="downloadReport()">
+          @if (downloading()) {
+            <mat-spinner diameter="18" />
+          } @else {
+            <mat-icon>download</mat-icon>
+          }
+          Download My Report
+        </button>
+        <p class="sh-view__download-hint">Exports only your commitment and payment records for this project.</p>
+      </div>
+    </div>
+  }
+</div>

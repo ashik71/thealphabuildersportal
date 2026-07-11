@@ -48,6 +48,7 @@ export interface ShareholderCategorySpend {
 
 export interface ShareholderFunding {
   ShareholderId: string;
+  CommitmentId: string | null;
   ShareholderName: string | null;
   Committed: number;
   Paid: number;
@@ -63,4 +64,26 @@ export interface ProjectFunding {
     Paid: number;
     Remaining: number;
   };
+}
+
+export interface ShareholderViewLinkResponse {
+  url: string;
+  expiresAt: string;
+}
+
+export interface ShareholderViewCategorySpend {
+  CategoryName: string;
+  SubCategoryName: string | null;
+  Amount: number;
+}
+
+export interface ShareholderView {
+  ProjectName: string;
+  ProjectLocation?: string;
+  ProjectStatus: string;
+  ShareholderName: string;
+  Committed: number;
+  Paid: number;
+  Remaining: number;
+  Categories: ShareholderViewCategorySpend[];
 }

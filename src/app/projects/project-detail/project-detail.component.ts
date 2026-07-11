@@ -67,7 +67,7 @@ export class ProjectDetailComponent {
   readonly reportExpenseColumns = ['date', 'category', 'subcategory', 'description', 'amount', 'paidTo'];
   readonly reportCommitmentColumns = ['shareholder', 'amount', 'notes'];
   readonly reportPaymentColumns = ['shareholder', 'category', 'subcategory', 'amount', 'date', 'notes'];
-  readonly shareholderSummaryColumns = ['shareholder', 'committed', 'paid', 'remaining'];
+  readonly shareholderSummaryColumns = ['shareholder', 'committed', 'paid', 'remaining', 'share'];
   readonly shareholderCategoryColumns = ['shareholder', 'category', 'subcategory', 'amount'];
 
   readonly shareholderCategoryRows = computed(() => {
@@ -169,6 +169,24 @@ export class ProjectDetailComponent {
         this.snackBar.open('Payment recorded', 'Dismiss', { duration: 3000 });
         this.loadFunding();
       });
+    });
+  }
+
+  shareShareholderLink(shareholder: ProjectFunding['Shareholders'][number]) {
+    if (!shareholder.CommitmentId) {
+      this.snackBar.open('Add a commitment for this shareholder before sharing a link', 'Dismiss', { duration: 4000 });
+      return;
+    }
+    this.fundingService.generateShareholderViewLink(shareholder.CommitmentId).subscribe({
+      next: (res) => {
+        navigator.clipboard?.writeText(res.url).catch(() => {});
+        this.snackBar.open(`Share link for ${shareholder.ShareholderName} copied to clipboard`, 'Dismiss', {
+          duration: 4000,
+        });
+      },
+      error: () => {
+        this.snackBar.open('Failed to generate share link', 'Dismiss', { duration: 3000 });
+      },
     });
   }
 

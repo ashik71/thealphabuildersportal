@@ -378,6 +378,19 @@
                 {{ s.Remaining | number: '1.0-0' }}
               </td>
             </ng-container>
+            <ng-container matColumnDef="share">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let s">
+                <button
+                  mat-icon-button
+                  matTooltip="Copy shareholder view link"
+                  [disabled]="!s.CommitmentId"
+                  (click)="shareShareholderLink(s)"
+                >
+                  <mat-icon>share</mat-icon>
+                </button>
+              </td>
+            </ng-container>
             <tr mat-header-row *matHeaderRowDef="shareholderSummaryColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: shareholderSummaryColumns"></tr>
           </table>

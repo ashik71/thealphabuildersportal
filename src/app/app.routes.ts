@@ -12,6 +12,11 @@ export const routes: Routes = [
     loadComponent: () => import('./projects/view-link/view-link.component').then((m) => m.ViewLinkComponent),
   },
   {
+    path: 'shareholder-view/:token',
+    loadComponent: () =>
+      import('./projects/shareholder-view/shareholder-view.component').then((m) => m.ShareholderViewComponent),
+  },
+  {
     path: 'admin',
     loadComponent: () => import('./admin/admin-layout/admin-layout.component').then((m) => m.AdminLayoutComponent),
     canActivate: [authGuard, adminGuard],
