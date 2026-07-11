@@ -1,51 +1,170 @@
-<div class="view-link-page">
+<div class="pv-view">
   @if (loading()) {
-    <mat-spinner diameter="36" />
+    <div class="pv-view__loading">
+      <mat-spinner diameter="40" />
+    </div>
   } @else if (error() || !project()) {
-    <mat-card class="view-link-page__card">
-      <mat-icon class="view-link-page__icon">link_off</mat-icon>
-      <h2>Link not available</h2>
-      <p>This view-only link is invalid or has expired. Please request a new link.</p>
-    </mat-card>
+    <div class="pv-view__center">
+      <mat-card class="pv-view__error-card">
+        <mat-icon class="pv-view__error-icon">link_off</mat-icon>
+        <h2>Link not available</h2>
+        <p>
+          @if (errorStatus() === 410) {
+            This share link has expired. Please ask Alpha Builders for a new one.
+          } @else {
+            This share link is invalid. Please ask Alpha Builders for a new one.
+          }
+        </p>
+      </mat-card>
+    </div>
   } @else {
-    <mat-card class="view-link-page__card">
-      <div class="view-link-page__brand">
-        <mat-icon>foundation</mat-icon>
-        Alpha Builders
+    <div class="pv-view__hero">
+      <div class="pv-view__hero-inner">
+        <div class="pv-view__brand">
+          <mat-icon>foundation</mat-icon>
+          <span>Alpha Builders</span>
+        </div>
+        <mat-chip-set>
+          <mat-chip class="pv-view__status-chip">{{ project()!.Status }}</mat-chip>
+        </mat-chip-set>
+        <h1 class="pv-view__project-name">{{ project()!.Name }}</h1>
+        @if (project()!.Location) {
+          <p class="pv-view__location">
+            <mat-icon inline>location_on</mat-icon>
+            {{ project()!.Location }}
+          </p>
+        }
+        @if (project()!.Summary) {
+          <p class="pv-view__summary">{{ project()!.Summary }}</p>
+        }
+      </div>
+    </div>
+
+    <div class="pv-view__body">
+      <mat-card class="pv-view__progress-card">
+        <div class="pv-view__progress-header">
+          <span class="pv-view__progress-label">Budget Used</span>
+          <span class="pv-view__progress-percent" [class.pv-view__progress-percent--warn]="isOverBudget()">
+            {{ costPercent() }}%
+          </span>
+        </div>
+        <mat-progress-bar mode="determinate" [value]="costPercent()" [color]="isOverBudget() ? 'warn' : 'primary'" />
+
+        <div class="pv-view__stats">
+          <div class="pv-view__stat">
+            <mat-icon class="pv-view__stat-icon">account_balance</mat-icon>
+            <div>
+              <span class="pv-view__stat-label">Estimated Cost</span>
+              <span class="pv-view__stat-value">{{ project()!.EstimatedCost | number: '1.0-0' }}</span>
+            </div>
+          </div>
+          <div class="pv-view__stat">
+            <mat-icon class="pv-view__stat-icon" [class.pv-view__stat-icon--warn]="isOverBudget()">
+              payments
+            </mat-icon>
+            <div>
+              <span class="pv-view__stat-label">Actual Cost</span>
+              <span class="pv-view__stat-value" [class.pv-view__stat-value--warn]="isOverBudget()">
+                {{ project()!.ActualCost | number: '1.0-0' }}
+              </span>
+            </div>
+          </div>
+          @if (project()!.StartDate) {
+            <div class="pv-view__stat">
+              <mat-icon class="pv-view__stat-icon">event</mat-icon>
+              <div>
+                <span class="pv-view__stat-label">Start Date</span>
+                <span class="pv-view__stat-value">{{ project()!.StartDate | date: 'mediumDate' }}</span>
+              </div>
+            </div>
+          }
+          @if (project()!.EndDate) {
+            <div class="pv-view__stat">
+              <mat-icon class="pv-view__stat-icon">event_available</mat-icon>
+              <div>
+                <span class="pv-view__stat-label">Target End Date</span>
+                <span class="pv-view__stat-value">{{ project()!.EndDate | date: 'mediumDate' }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </mat-card>
+
+      <mat-card class="pv-view__progress-card pv-view__funding-card">
+        <div class="pv-view__progress-header">
+          <span class="pv-view__progress-label">
+            Funding Progress
+            <span class="pv-view__shareholder-count">
+              <mat-icon inline>groups</mat-icon>
+              {{ project()!.Funding.ShareholderCount }}
+              {{ project()!.Funding.ShareholderCount === 1 ? 'shareholder' : 'shareholders' }}
+            </span>
+          </span>
+          <span class="pv-view__progress-percent">{{ fundingPercent() }}%</span>
+        </div>
+        <mat-progress-bar mode="determinate" [value]="fundingPercent()" color="tertiary" />
+
+        <div class="pv-view__stats">
+          <div class="pv-view__stat">
+            <mat-icon class="pv-view__stat-icon">handshake</mat-icon>
+            <div>
+              <span class="pv-view__stat-label">Committed</span>
+              <span class="pv-view__stat-value">{{ project()!.Funding.Committed | number: '1.0-0' }}</span>
+            </div>
+          </div>
+          <div class="pv-view__stat">
+            <mat-icon class="pv-view__stat-icon pv-view__stat-icon--success">savings</mat-icon>
+            <div>
+              <span class="pv-view__stat-label">Paid</span>
+              <span class="pv-view__stat-value">{{ project()!.Funding.Paid | number: '1.0-0' }}</span>
+            </div>
+          </div>
+          <div class="pv-view__stat">
+            <mat-icon class="pv-view__stat-icon">account_balance_wallet</mat-icon>
+            <div>
+              <span class="pv-view__stat-label">Remaining</span>
+              <span class="pv-view__stat-value">{{ project()!.Funding.Remaining | number: '1.0-0' }}</span>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+
+      <div class="pv-view__section-header">
+        <h2>Cost Breakdown by Category</h2>
       </div>
 
-      <h2>{{ project()!.Name }}</h2>
-      <p class="view-link-page__location">
-        <mat-icon inline>location_on</mat-icon>
-        {{ project()!.Location || 'No location set' }}
-      </p>
-
-      @if (project()!.Summary) {
-        <p class="view-link-page__summary">{{ project()!.Summary }}</p>
+      @if (project()!.CostBreakdown.length === 0) {
+        <mat-card class="pv-view__empty-card">
+          <mat-icon>inbox</mat-icon>
+          <p>No cost report generated yet.</p>
+        </mat-card>
+      } @else {
+        <div class="pv-view__category-grid">
+          @for (c of project()!.CostBreakdown; track c.CategoryId + (c.SubcategoryId || '')) {
+            <mat-card class="pv-view__category-card">
+              <div class="pv-view__category-name">{{ c.CategoryName }}</div>
+              @if (c.SubcategoryName) {
+                <div class="pv-view__category-sub">{{ c.SubcategoryName }}</div>
+              }
+              <div class="pv-view__category-amounts">
+                <div>
+                  <span class="pv-view__category-amount-label">Estimated</span>
+                  <span class="pv-view__category-amount">{{ c.EstimatedCost | number: '1.0-0' }}</span>
+                </div>
+                <div>
+                  <span class="pv-view__category-amount-label">Actual</span>
+                  <span
+                    class="pv-view__category-amount"
+                    [class.pv-view__category-amount--warn]="c.ActualCost > c.EstimatedCost"
+                  >
+                    {{ c.ActualCost | number: '1.0-0' }}
+                  </span>
+                </div>
+              </div>
+            </mat-card>
+          }
+        </div>
       }
-
-      <div class="view-link-page__stats">
-        <div>
-          <span class="view-link-page__stat-label">Status</span>
-          <span class="view-link-page__stat-value">{{ project()!.Status }}</span>
-        </div>
-        <div>
-          <span class="view-link-page__stat-label">Estimated Cost</span>
-          <span class="view-link-page__stat-value">{{ project()!.EstimatedCost | number: '1.0-0' }}</span>
-        </div>
-        @if (project()!.StartDate) {
-          <div>
-            <span class="view-link-page__stat-label">Start Date</span>
-            <span class="view-link-page__stat-value">{{ project()!.StartDate | date: 'mediumDate' }}</span>
-          </div>
-        }
-        @if (project()!.EndDate) {
-          <div>
-            <span class="view-link-page__stat-label">Target End Date</span>
-            <span class="view-link-page__stat-value">{{ project()!.EndDate | date: 'mediumDate' }}</span>
-          </div>
-        }
-      </div>
-    </mat-card>
+    </div>
   }
 </div>

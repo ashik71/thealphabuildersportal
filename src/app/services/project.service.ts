@@ -2,7 +2,13 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Project, ProjectCostReport, ProjectInput, ViewLinkResponse } from '../interfaces/project.interface';
+import {
+  Project,
+  ProjectCostReport,
+  ProjectInput,
+  ProjectPublicView,
+  ViewLinkResponse,
+} from '../interfaces/project.interface';
 import { ProjectFunding } from '../interfaces/funding.interface';
 
 @Injectable({ providedIn: 'root' })
@@ -46,7 +52,7 @@ export class ProjectService {
     return this.http.post<ViewLinkResponse>(`${this.baseUrl}/${projectId}/view-link`, {});
   }
 
-  getByViewToken(token: string): Observable<Project> {
-    return this.http.get<Project>(`${this.baseUrl}/view/${token}`);
+  getByViewToken(token: string): Observable<ProjectPublicView> {
+    return this.http.get<ProjectPublicView>(`${this.baseUrl}/view/${token}`);
   }
 }

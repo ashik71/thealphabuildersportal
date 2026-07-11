@@ -49,3 +49,21 @@ export interface ViewLinkResponse {
   url: string;
   expiresAt: string;
 }
+
+export interface ProjectPublicView {
+  Name: string;
+  Location?: string;
+  Summary?: string;
+  Status: ProjectStatus;
+  EstimatedCost: number;
+  ActualCost: number;
+  StartDate?: string;
+  EndDate?: string;
+  CostBreakdown: CostBreakdownItem[];
+  Funding: {
+    ShareholderCount: number;
+    Committed: number;
+    Paid: number;
+    Remaining: number;
+  };
+}
