@@ -66,24 +66,3 @@ export interface ProjectFunding {
   };
 }
 
-export interface ShareholderViewLinkResponse {
-  url: string;
-  expiresAt: string;
-}
-
-export interface ShareholderViewCategorySpend {
-  CategoryName: string;
-  SubCategoryName: string | null;
-  Amount: number;
-}
-
-export interface ShareholderView {
-  ProjectName: string;
-  ProjectLocation?: string;
-  ProjectStatus: string;
-  ShareholderName: string;
-  Committed: number;
-  Paid: number;
-  Remaining: number;
-  Categories: ShareholderViewCategorySpend[];
-}

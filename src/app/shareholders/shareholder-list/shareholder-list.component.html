@@ -58,6 +58,14 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let s">
+          <button
+            mat-icon-button
+            (click)="openInviteDialog(s)"
+            [disabled]="!canInvite(s)"
+            [matTooltip]="canInvite(s) ? 'Invite to portal' : 'Add an email address to invite'"
+          >
+            <mat-icon>person_add</mat-icon>
+          </button>
           <button mat-icon-button (click)="openEditDialog(s)" matTooltip="Edit">
             <mat-icon>edit</mat-icon>
           </button>

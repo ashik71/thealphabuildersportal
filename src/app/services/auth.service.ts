@@ -14,7 +14,12 @@ export class AuthService {
   private readonly currentUserSignal = signal<User | null>(this.readStoredUser());
   readonly currentUser = this.currentUserSignal.asReadonly();
   readonly isLoggedIn = computed(() => this.currentUserSignal() !== null);
-  readonly isAdmin = computed(() => this.currentUserSignal()?.isAdmin ?? false);
+  readonly role = computed(() => this.currentUserSignal()?.role ?? null);
+  readonly isAdmin = computed(() => this.role() === 'admin');
+  readonly isShareholder = computed(() => this.role() === 'shareholder');
+
+  /** Where this user belongs after signing in. */
+  readonly homeRoute = computed(() => (this.isAdmin() ? '/admin' : '/portal'));
 
   login(email: string, password: string) {
     return this.http.post<User>(`${environment.apiBase}/auth/login`, { email, password }).pipe(

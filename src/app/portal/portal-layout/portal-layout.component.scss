@@ -1,0 +1,47 @@
+.portal {
+  min-height: 100dvh;
+  background: var(--mat-sys-surface-container-low);
+
+  &__bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--mat-sys-surface);
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+  }
+
+  &__brand {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  &__spacer {
+    flex: 1 1 auto;
+  }
+
+  &__account {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  &__name {
+    // The name is secondary to the icon on a narrow screen.
+    @media (max-width: 30rem) {
+      display: none;
+    }
+  }
+
+  &__menu-email {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    color: var(--mat-sys-on-surface-variant);
+    overflow-wrap: anywhere;
+  }
+
+  &__content {
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 3rem;
+  }
+}

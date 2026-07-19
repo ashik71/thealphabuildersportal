@@ -53,16 +53,16 @@ export class LoginComponent {
       .login(email, password)
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
-        next: (user) => {
-          if (!user.isAdmin) {
-            this.auth.logout();
-            this.errorMessage.set('This account does not have admin access.');
-            return;
-          }
-          this.router.navigate(['/admin']);
+        next: () => {
+          // Admins go to the admin area, shareholders to their portal.
+          this.router.navigate([this.auth.homeRoute()]);
         },
-        error: () => {
-          this.errorMessage.set('Invalid email or password.');
+        error: (err) => {
+          this.errorMessage.set(
+            err.status === 403
+              ? 'This account is no longer active. Please contact the administrator.'
+              : 'Invalid email or password.'
+          );
         },
       });
   }

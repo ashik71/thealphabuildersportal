@@ -1,0 +1,88 @@
+<header class="dash__header">
+  <h1>My Investments</h1>
+  <p class="dash__muted">Welcome back{{ userName ? ', ' + userName : '' }}</p>
+</header>
+
+@if (loading()) {
+  <div class="dash__centered">
+    <mat-spinner diameter="36" />
+  </div>
+} @else if (failed()) {
+  <mat-card class="dash__centered">
+    <mat-icon class="dash__empty-icon">cloud_off</mat-icon>
+    <p>We could not load your details just now. Please refresh the page.</p>
+  </mat-card>
+} @else {
+  @if (summary(); as s) {
+    <section class="dash__stats">
+      <mat-card class="dash__stat">
+        <span class="dash__stat-label">Committed</span>
+        <span class="dash__stat-value">{{ s.Committed | number: '1.0-0' }}</span>
+      </mat-card>
+      <mat-card class="dash__stat">
+        <span class="dash__stat-label">Paid</span>
+        <span class="dash__stat-value">{{ s.Paid | number: '1.0-0' }}</span>
+      </mat-card>
+      <mat-card class="dash__stat">
+        <span class="dash__stat-label">Remaining</span>
+        <span class="dash__stat-value" [class.dash__stat-value--due]="s.Remaining > 0">
+          {{ s.Remaining | number: '1.0-0' }}
+        </span>
+      </mat-card>
+      <mat-card class="dash__stat">
+        <span class="dash__stat-label">Projects</span>
+        <span class="dash__stat-value">{{ s.ProjectCount }}</span>
+      </mat-card>
+    </section>
+  }
+
+  <h2 class="dash__section-title">Projects</h2>
+
+  @if (projects().length === 0) {
+    <mat-card class="dash__centered">
+      <mat-icon class="dash__empty-icon">folder_open</mat-icon>
+      <p>You are not linked to any projects yet.</p>
+      <p class="dash__muted">Once the administrator records your commitment, it will appear here.</p>
+    </mat-card>
+  } @else {
+    <div class="dash__projects">
+      @for (project of projects(); track project.ProjectId) {
+        <a class="dash__project" [routerLink]="['/portal/projects', project.ProjectId]">
+          <mat-card class="dash__project-card">
+            <div class="dash__project-head">
+              <div>
+                <h3>{{ project.Name }}</h3>
+                @if (project.Location) {
+                  <p class="dash__muted">
+                    <mat-icon class="dash__inline-icon">place</mat-icon>
+                    {{ project.Location }}
+                  </p>
+                }
+              </div>
+              <mat-chip class="dash__status">{{ statusLabel(project.Status) }}</mat-chip>
+            </div>
+
+            <mat-progress-bar mode="determinate" [value]="progress(project)" />
+
+            <div class="dash__project-figures">
+              <div>
+                <span class="dash__muted">Committed</span>
+                <strong>{{ project.Committed | number: '1.0-0' }}</strong>
+              </div>
+              <div>
+                <span class="dash__muted">Paid</span>
+                <strong>{{ project.Paid | number: '1.0-0' }}</strong>
+              </div>
+              <div>
+                <span class="dash__muted">Remaining</span>
+                <strong [class.dash__due]="project.Remaining > 0">
+                  {{ project.Remaining | number: '1.0-0' }}
+                </strong>
+              </div>
+            </div>
+          </mat-card>
+        </a>
+      }
+    </div>
+  }
+}

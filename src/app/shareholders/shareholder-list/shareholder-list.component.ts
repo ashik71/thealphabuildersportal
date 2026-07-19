@@ -15,6 +15,7 @@ import { ProjectService } from '../../services/project.service';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { ShareholderFormDialogComponent } from '../shareholder-form-dialog/shareholder-form-dialog.component';
+import { InviteDialogComponent } from '../invite-dialog/invite-dialog.component';
 import { Shareholder, ShareholderProject } from '../../interfaces/shareholder.interface';
 import { Project } from '../../interfaces/project.interface';
 
@@ -97,6 +98,24 @@ export class ShareholderListComponent {
         this.refresh();
       });
     });
+  }
+
+  /**
+   * A portal account is keyed to the shareholder's email address, so there is
+   * nothing to invite without one.
+   */
+  canInvite(shareholder: Shareholder) {
+    return !!shareholder.Email;
+  }
+
+  openInviteDialog(shareholder: Shareholder) {
+    if (!this.canInvite(shareholder)) {
+      this.snackBar.open('Add an email address for this shareholder first', 'Dismiss', {
+        duration: 4000,
+      });
+      return;
+    }
+    this.dialog.open(InviteDialogComponent, { data: { shareholder }, width: '520px' });
   }
 
   deleteShareholder(shareholder: Shareholder) {

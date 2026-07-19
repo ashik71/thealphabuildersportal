@@ -7,8 +7,6 @@ import {
   CommitmentInput,
   Payment,
   PaymentInput,
-  ShareholderView,
-  ShareholderViewLinkResponse,
 } from '../interfaces/funding.interface';
 
 @Injectable({ providedIn: 'root' })
@@ -43,17 +41,5 @@ export class FundingService {
 
   deletePayment(id: string): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.paymentsUrl}/${id}`);
-  }
-
-  generateShareholderViewLink(commitmentId: string): Observable<ShareholderViewLinkResponse> {
-    return this.http.post<ShareholderViewLinkResponse>(`${this.commitmentsUrl}/${commitmentId}/view-link`, {});
-  }
-
-  getByShareholderViewToken(token: string): Observable<ShareholderView> {
-    return this.http.get<ShareholderView>(`${this.commitmentsUrl}/view/${token}`);
-  }
-
-  downloadShareholderReport(token: string): Observable<Blob> {
-    return this.http.get(`${this.commitmentsUrl}/view/${token}/report`, { responseType: 'blob' });
   }
 }

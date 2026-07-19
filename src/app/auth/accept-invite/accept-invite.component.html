@@ -1,0 +1,100 @@
+<div class="accept">
+  <mat-card class="accept__card">
+    @if (checking()) {
+      <div class="accept__centered">
+        <mat-spinner diameter="36" />
+        <p>Checking your invitation…</p>
+      </div>
+    } @else if (invalidInvite()) {
+      <div class="accept__centered">
+        <mat-icon class="accept__icon accept__icon--error">link_off</mat-icon>
+        <h2>This link is no longer valid</h2>
+        <p class="accept__muted">
+          Invitation links expire and can only be used once. If you have already created your
+          account, sign in below. Otherwise ask the administrator to send you a new invitation.
+        </p>
+        <a mat-flat-button color="primary" routerLink="/login">Go to sign in</a>
+      </div>
+    } @else {
+      <header class="accept__header">
+        <h1>The Alpha Builders</h1>
+        <p class="accept__muted">
+          Welcome{{ shareholderName() ? ', ' + shareholderName() : '' }}. Set a password to
+          activate your account.
+        </p>
+      </header>
+
+      <p class="accept__email">
+        <mat-icon>mail_outline</mat-icon>
+        <span>{{ email() }}</span>
+      </p>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="accept__form">
+        <mat-form-field appearance="outline">
+          <mat-label>Your name</mat-label>
+          <input matInput formControlName="name" autocomplete="name" required />
+          @if (form.controls.name.touched && form.controls.name.hasError('required')) {
+            <mat-error>Please enter your name</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            [type]="hidePassword() ? 'password' : 'text'"
+            formControlName="password"
+            autocomplete="new-password"
+            required
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hidePassword.set(!hidePassword())"
+            [attr.aria-label]="hidePassword() ? 'Show password' : 'Hide password'"
+          >
+            <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-hint>At least 8 characters</mat-hint>
+          @if (form.controls.password.touched && form.controls.password.hasError('minlength')) {
+            <mat-error>Password must be at least 8 characters</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Confirm password</mat-label>
+          <input
+            matInput
+            [type]="hidePassword() ? 'password' : 'text'"
+            formControlName="confirmPassword"
+            autocomplete="new-password"
+            required
+          />
+        </mat-form-field>
+
+        @if (form.touched && form.hasError('mismatch')) {
+          <p class="accept__error">
+            <mat-icon>error_outline</mat-icon>
+            The two passwords do not match
+          </p>
+        }
+
+        @if (errorMessage()) {
+          <p class="accept__error">
+            <mat-icon>error_outline</mat-icon>
+            {{ errorMessage() }}
+          </p>
+        }
+
+        <button mat-flat-button color="primary" type="submit" [disabled]="submitting()">
+          @if (submitting()) {
+            <mat-spinner diameter="20" />
+          } @else {
+            Activate my account
+          }
+        </button>
+      </form>
+    }
+  </mat-card>
+</div>

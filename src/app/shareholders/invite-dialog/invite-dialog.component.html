@@ -1,0 +1,73 @@
+<h2 mat-dialog-title>Invite {{ data.shareholder.Name }}</h2>
+
+<mat-dialog-content>
+  @if (!inviteUrl()) {
+    <p class="invite__intro">
+      Creates a one-time registration link for
+      <strong>{{ data.shareholder.Email }}</strong>. They will set their own password and
+      will only ever see their own commitments and payments.
+    </p>
+
+    <form [formGroup]="form">
+      <mat-form-field appearance="outline" class="invite__field">
+        <mat-label>Link expires after</mat-label>
+        <mat-select formControlName="expiryHours">
+          @for (hours of expiryOptions; track hours) {
+            <mat-option [value]="hours">{{ hours }} hours</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    @if (errorMessage()) {
+      <p class="invite__error">
+        <mat-icon>error_outline</mat-icon>
+        {{ errorMessage() }}
+      </p>
+    }
+  } @else {
+    <div class="invite__result">
+      @if (emailSent()) {
+        <p class="invite__status invite__status--ok">
+          <mat-icon>mark_email_read</mat-icon>
+          Sent to {{ data.shareholder.Email }}
+        </p>
+      } @else {
+        <p class="invite__status invite__status--manual">
+          <mat-icon>link</mat-icon>
+          Email is not configured yet — send this link manually.
+        </p>
+      }
+
+      <div class="invite__link">
+        <code>{{ inviteUrl() }}</code>
+      </div>
+
+      <button mat-flat-button color="primary" type="button" (click)="copyLink()">
+        <mat-icon>{{ copied() ? 'check' : 'content_copy' }}</mat-icon>
+        {{ copied() ? 'Copied' : 'Copy link' }}
+      </button>
+
+      <p class="invite__note">
+        Valid until {{ expiresAt() | date: 'medium' }}, and usable only once. This link is
+        shown here only now — it is not stored, so copy it before closing. If you lose it,
+        simply send a new invitation.
+      </p>
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  @if (!inviteUrl()) {
+    <button mat-button type="button" (click)="close()">Cancel</button>
+    <button mat-flat-button color="primary" type="button" [disabled]="loading()" (click)="send()">
+      @if (loading()) {
+        <mat-spinner diameter="18" />
+      } @else {
+        Create invitation
+      }
+    </button>
+  } @else {
+    <button mat-flat-button type="button" (click)="close()">Done</button>
+  }
+</mat-dialog-actions>
