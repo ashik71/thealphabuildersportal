@@ -22,7 +22,7 @@ export class SidebarComponent {
 
   readonly navItems: NavItem[] = [
     { path: '/admin/dashboard', label: 'Dashboard', icon: 'space_dashboard' },
-    { path: '/admin/projects', label: 'Sukun Builders', icon: 'foundation' },
+    { path: '/admin/projects', label: 'Projects', icon: 'foundation' },
     { path: '/admin/shareholders', label: 'Shareholders', icon: 'groups' },
     { path: '/admin/cost-categories', label: 'Cost Categories', icon: 'category' },
   ];
