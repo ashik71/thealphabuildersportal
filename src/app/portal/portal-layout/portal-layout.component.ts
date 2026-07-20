@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from '../../services/auth.service';
+import { LogoMarkComponent } from '../../shared/components/logo-mark/logo-mark.component';
 
 /**
  * Shell for the shareholder portal. Deliberately minimal compared to the admin
@@ -13,7 +14,14 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-portal-layout',
   standalone: true,
-  imports: [RouterOutlet, MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule],
+  imports: [
+    RouterOutlet,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    LogoMarkComponent,
+  ],
   templateUrl: './portal-layout.component.html',
   styleUrl: './portal-layout.component.scss',
 })

@@ -6,11 +6,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from '../../services/auth.service';
 import { LayoutService } from '../../services/layout.service';
+import { LogoMarkComponent } from '../../shared/components/logo-mark/logo-mark.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MatToolbarModule, MatIconModule, MatButtonModule, MatMenuModule],
+  imports: [MatToolbarModule, MatIconModule, MatButtonModule, MatMenuModule, LogoMarkComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })

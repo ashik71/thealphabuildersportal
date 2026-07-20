@@ -1,6 +1,9 @@
 <div class="portal">
   <mat-toolbar class="portal__bar">
-    <span class="portal__brand">Sukun Builders</span>
+    <span class="portal__brand">
+      <app-logo-mark [size]="24" [inline]="true" gap="var(--mat-sys-surface, #fff)" />
+      Sukun Builders
+    </span>
     <span class="portal__spacer"></span>
 
     <button mat-button [matMenuTriggerFor]="menu" class="portal__account">

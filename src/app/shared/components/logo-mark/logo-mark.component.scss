@@ -1,0 +1,14 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.logo-mark {
+  display: block;
+  // Width is bound alongside height in the template from the 290x465 viewBox;
+  // a surrounding flex context would otherwise collapse it and squash the
+  // letterforms.
+  flex: 0 0 auto;
+  overflow: visible;
+}
