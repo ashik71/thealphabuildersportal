@@ -1,0 +1,53 @@
+<svg
+  class="logo-lockup"
+  [attr.viewBox]="markOnly() ? '0 0 1180 1500' : '0 0 1180 1900'"
+  role="img"
+  aria-label="Sukun Builders"
+  [style.height.px]="size()"
+  [style.width.px]="width()"
+>
+  <!-- Letterforms. Drawn first so the tower and its gap sit on top. -->
+  <g
+    fill="currentColor"
+    font-family="Poppins, 'Segoe UI', Arial, sans-serif"
+    font-weight="700"
+    font-size="820"
+    text-anchor="middle"
+  >
+    <text x="365" y="1290">S</text>
+    <text x="815" y="1290">B</text>
+  </g>
+
+  <!-- Gap band: a solid bar in the surface colour that separates the tower from
+       the letters behind it, matching the artwork's cream channel. -->
+  <rect [attr.fill]="gap()" x="505" y="410" width="170" height="1090" />
+
+  <!-- Tower: stepped spire, shaft, and plinth. -->
+  <g fill="currentColor">
+    <rect x="530" y="420" width="120" height="1010" />
+    <rect x="495" y="1430" width="190" height="70" />
+    <rect x="545" y="330" width="90" height="90" />
+    <rect x="560" y="250" width="60" height="80" />
+    <rect x="578" y="150" width="24" height="100" />
+  </g>
+
+  <!-- Windows: two columns, punched in the surface colour. -->
+  <g [attr.fill]="gap()">
+    <rect x="551" y="455" width="32" height="32" />
+    <rect x="598" y="455" width="32" height="32" />
+    <rect x="551" y="518" width="32" height="32" />
+    <rect x="598" y="518" width="32" height="32" />
+    <rect x="551" y="581" width="32" height="32" />
+    <rect x="598" y="581" width="32" height="32" />
+    <rect x="551" y="1345" width="32" height="32" />
+    <rect x="598" y="1345" width="32" height="32" />
+  </g>
+
+  <!-- Wordmark: heavy SUKUN over widely tracked BUILDERS. -->
+  @if (!markOnly()) {
+    <g fill="currentColor" font-family="Poppins, 'Segoe UI', Arial, sans-serif" text-anchor="middle">
+      <text x="590" y="1700" font-size="250" font-weight="700" letter-spacing="18">SUKUN</text>
+      <text x="590" y="1870" font-size="170" font-weight="500" letter-spacing="52">BUILDERS</text>
+    </g>
+  }
+</svg>
