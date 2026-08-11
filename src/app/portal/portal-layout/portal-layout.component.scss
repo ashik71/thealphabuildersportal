@@ -16,6 +16,15 @@
     background: var(--portal-surface);
     border-bottom: 1px solid var(--portal-divider);
     color: var(--portal-ink);
+
+    // mat-button/mat-icon-button read text/icon color from Material's own
+    // theme tokens (on-surface-variant / primary), not inherited `color` —
+    // same class of bug as mat-card's background (see portal-dashboard.
+    // component.scss). Override the tokens directly so the toolbar stays
+    // legible against --portal-surface in both themes.
+    --mat-icon-button-icon-color: var(--portal-ink);
+    --mat-text-button-text-label-text-color: var(--portal-ink);
+    --mat-text-button-state-layer-color: var(--portal-ink);
   }
 
   &__brand {
@@ -55,4 +64,18 @@
     margin: 0 auto;
     padding: 1.5rem 1rem 3rem;
   }
+}
+
+// mat-menu renders its panel in a CDK overlay appended to <body>, outside
+// this component's DOM subtree, so plain descendant selectors above never
+// reach it. ::ng-deep is Angular's sanctioned way to target overlay content
+// from a component's own stylesheet; --portal-* tokens themselves are safe
+// to reference here since they're defined globally on `html` (styles.scss).
+::ng-deep .portal-account-menu-panel {
+  background: var(--portal-surface) !important;
+  color: var(--portal-ink) !important;
+
+  --mat-menu-container-color: var(--portal-surface);
+  --mat-menu-item-label-text-color: var(--portal-ink);
+  --mat-menu-item-icon-color: var(--portal-ink-muted);
 }

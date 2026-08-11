@@ -16,12 +16,12 @@
     </button>
 
     <button mat-button [matMenuTriggerFor]="menu" class="portal__account">
-      <mat-icon>account_circle</mat-icon>
+      <app-avatar [name]="user()?.name ?? ''" [size]="28" />
       <span class="portal__name">{{ user()?.name }}</span>
       <mat-icon>arrow_drop_down</mat-icon>
     </button>
 
-    <mat-menu #menu="matMenu">
+    <mat-menu #menu="matMenu" class="portal__menu" panelClass="portal-account-menu-panel">
       <div class="portal__menu-email">{{ user()?.email }}</div>
       <button mat-menu-item (click)="logout()">
         <mat-icon>logout</mat-icon>

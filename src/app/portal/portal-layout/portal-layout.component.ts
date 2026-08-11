@@ -7,6 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from '../../services/auth.service';
 import { PortalThemeService } from '../../services/portal-theme.service';
 import { LogoMarkComponent } from '../../shared/components/logo-mark/logo-mark.component';
+import { AvatarComponent } from '../../shared/components/avatar/avatar.component';
 
 /**
  * Shell for the shareholder portal. Deliberately minimal compared to the admin
@@ -22,6 +23,7 @@ import { LogoMarkComponent } from '../../shared/components/logo-mark/logo-mark.c
     MatIconModule,
     MatMenuModule,
     LogoMarkComponent,
+    AvatarComponent,
   ],
   templateUrl: './portal-layout.component.html',
   styleUrl: './portal-layout.component.scss',
