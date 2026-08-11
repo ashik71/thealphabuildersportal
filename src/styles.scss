@@ -16,6 +16,40 @@ html {
       density: 0,
     )
   );
+
+  // Champagne Ledger palette (ported from the-alpha-builders-mobile's brand
+  // theme) — used only by the shareholder portal (src/app/portal/**), kept
+  // separate from the admin Material theme above. Defined here, not in a
+  // component's SCSS, because Angular's emulated view encapsulation rewrites
+  // component-scoped `:root` selectors into `:root[_ngcontent-xxx]`, which
+  // can never match the real <html> element and silently does nothing.
+  --portal-bg: #faf6ec;
+  --portal-surface: #ffffff;
+  --portal-primary: #7a5c10;
+  --portal-accent: #c9a227;
+  --portal-ink: #201d14;
+  --portal-ink-muted: #776f5c;
+  --portal-divider: #e7e1d2;
+  --portal-success: #276749;
+  --portal-success-bg: #dfeadf;
+  --portal-warning: #9b5a0e;
+  --portal-warning-bg: #f1e6c3;
+  --portal-shadow: rgba(20, 32, 29, 0.08);
+
+  &[data-portal-theme='dark'] {
+    --portal-bg: #171410;
+    --portal-surface: #221e16;
+    --portal-primary: #d9b84a;
+    --portal-accent: #d9b84a;
+    --portal-ink: #efe9d8;
+    --portal-ink-muted: #a79d85;
+    --portal-divider: #33301f;
+    --portal-success: #79b98f;
+    --portal-success-bg: #1f3328;
+    --portal-warning: #e0a45c;
+    --portal-warning-bg: #40350f;
+    --portal-shadow: rgba(0, 0, 0, 0.35);
+  }
 }
 
 html,

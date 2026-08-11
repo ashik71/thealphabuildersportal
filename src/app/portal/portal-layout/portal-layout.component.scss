@@ -1,39 +1,6 @@
-// Champagne Ledger palette (ported from the-alpha-builders-mobile's brand
-// theme) — scoped locally rather than swapping the global Material theme,
-// which is shared with the admin views. PortalThemeService sets
-// data-portal-theme on <html>; :host can't match an ancestor attribute, so
-// the token block targets :root instead and is scoped by the (unused-outside-
-// portal) --portal-* names rather than by selector.
-:root {
-  --portal-bg: #faf6ec;
-  --portal-surface: #ffffff;
-  --portal-primary: #7a5c10;
-  --portal-accent: #c9a227;
-  --portal-ink: #201d14;
-  --portal-ink-muted: #776f5c;
-  --portal-divider: #e7e1d2;
-  --portal-success: #276749;
-  --portal-success-bg: #dfeadf;
-  --portal-warning: #9b5a0e;
-  --portal-warning-bg: #f1e6c3;
-  --portal-shadow: rgba(20, 32, 29, 0.08);
-}
-
-:root[data-portal-theme='dark'] {
-  --portal-bg: #171410;
-  --portal-surface: #221e16;
-  --portal-primary: #d9b84a;
-  --portal-accent: #d9b84a;
-  --portal-ink: #efe9d8;
-  --portal-ink-muted: #a79d85;
-  --portal-divider: #33301f;
-  --portal-success: #79b98f;
-  --portal-success-bg: #1f3328;
-  --portal-warning: #e0a45c;
-  --portal-warning-bg: #40350f;
-  --portal-shadow: rgba(0, 0, 0, 0.35);
-}
-
+// Champagne Ledger palette tokens (--portal-*) are defined globally in
+// styles.scss — component-scoped `:root` doesn't work under Angular's
+// emulated view encapsulation (see comment there for why).
 .portal {
   min-height: 100dvh;
   background: var(--portal-bg);
