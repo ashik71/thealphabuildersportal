@@ -56,9 +56,19 @@
           </p>
 
           <mat-checkbox formControlName="MarkSharesPaid">Mark each share as already paid</mat-checkbox>
+
+          @if (data.expense?.HasShares) {
+            <p class="expense-split__hint">
+              Saving will recalculate every shareholder's share to match the amount above.
+            </p>
+          }
+        } @else if (data.expense?.HasShares) {
+          <p class="expense-split__hint">
+            Saving will remove this expense's existing shareholder shares and payments.
+          </p>
         }
       </div>
-    } @else if (!data.expense && (data.shareholderCount ?? 0) === 0) {
+    } @else if ((data.shareholderCount ?? 0) === 0) {
       <p class="expense-split__hint">Add a shareholder commitment to this project to split expenses among them.</p>
     }
   </mat-dialog-content>

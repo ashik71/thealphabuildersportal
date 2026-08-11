@@ -23,6 +23,10 @@ export interface Expense {
   Notes?: string;
   IsDeleted?: boolean;
   DeletedAt?: string | null;
+  /** True if this expense was split across shareholders (has ExpenseShare records). */
+  HasShares?: boolean;
+  /** True if HasShares and every share was marked paid. */
+  SharesArePaid?: boolean;
 }
 
 export interface ExpenseInput {

@@ -47,8 +47,9 @@ export class ExpenseFormDialogComponent {
 
   readonly categories = toSignal(this.costCategoryService.getAll(), { initialValue: [] as CostCategory[] });
 
-  /** Splitting only makes sense when creating a new expense with shareholders on the project. */
-  readonly canSplit = !this.data.expense && (this.data.shareholderCount ?? 0) > 0;
+  /** Splitting only makes sense when the project has shareholders — allowed on
+   * both create and edit; editing always re-splits (see save()). */
+  readonly canSplit = (this.data.shareholderCount ?? 0) > 0;
 
   readonly form = this.fb.nonNullable.group({
     CostCategoryId: ['', Validators.required],
@@ -85,6 +86,8 @@ export class ExpenseFormDialogComponent {
         Amount: expense.Amount,
         PaidTo: expense.PaidTo ?? '',
         Notes: expense.Notes ?? '',
+        SplitAmongShareholders: !!expense.HasShares,
+        MarkSharesPaid: !!expense.SharesArePaid,
       });
     }
   }
