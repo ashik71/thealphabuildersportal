@@ -1,13 +1,33 @@
+// Champagne Ledger palette (ported from the-alpha-builders-mobile's brand
+// theme) — scoped locally rather than swapping the global Material theme,
+// which is shared with the admin views.
+:host {
+  --portal-bg: #faf6ec;
+  --portal-surface: #ffffff;
+  --portal-primary: #7a5c10;
+  --portal-accent: #c9a227;
+  --portal-ink: #201d14;
+  --portal-ink-muted: #776f5c;
+  --portal-divider: #e7e1d2;
+  --portal-success: #276749;
+  --portal-success-bg: #dfeadf;
+  --portal-warning: #9b5a0e;
+  --portal-warning-bg: #f1e6c3;
+  --portal-shadow: rgba(20, 32, 29, 0.08);
+}
+
 .portal {
   min-height: 100dvh;
-  background: var(--mat-sys-surface-container-low);
+  background: var(--portal-bg);
+  color: var(--portal-ink);
 
   &__bar {
     position: sticky;
     top: 0;
     z-index: 10;
-    background: var(--mat-sys-surface);
-    border-bottom: 1px solid var(--mat-sys-outline-variant);
+    background: var(--portal-surface);
+    border-bottom: 1px solid var(--portal-divider);
+    color: var(--portal-ink);
   }
 
   &__brand {

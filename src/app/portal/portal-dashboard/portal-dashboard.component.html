@@ -15,28 +15,28 @@
 } @else {
   @if (summary(); as s) {
     <section class="dash__stats">
-      <mat-card class="dash__stat">
+      <mat-card class="dash__stat" style="--stat-accent: var(--portal-primary)">
         <span class="dash__stat-label">Committed</span>
         <span class="dash__stat-value">{{ s.Committed | number: '1.0-0' }}</span>
       </mat-card>
-      <mat-card class="dash__stat">
+      <mat-card class="dash__stat" style="--stat-accent: var(--portal-success)">
         <span class="dash__stat-label">Paid</span>
         <span class="dash__stat-value">{{ s.Paid | number: '1.0-0' }}</span>
       </mat-card>
-      <mat-card class="dash__stat">
+      <mat-card class="dash__stat" style="--stat-accent: var(--portal-warning)">
         <span class="dash__stat-label">Remaining</span>
         <span class="dash__stat-value" [class.dash__stat-value--due]="s.Remaining > 0">
           {{ s.Remaining | number: '1.0-0' }}
         </span>
       </mat-card>
-      <mat-card class="dash__stat">
-        <span class="dash__stat-label">Sukun Builders</span>
+      <mat-card class="dash__stat" style="--stat-accent: var(--portal-accent)">
+        <span class="dash__stat-label">Projects</span>
         <span class="dash__stat-value">{{ s.ProjectCount }}</span>
       </mat-card>
     </section>
   }
 
-  <h2 class="dash__section-title">Sukun Builders</h2>
+  <h2 class="dash__section-title">Your Projects</h2>
 
   @if (projects().length === 0) {
     <mat-card class="dash__centered">
