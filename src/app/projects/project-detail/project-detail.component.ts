@@ -183,25 +183,35 @@ export class ProjectDetailComponent {
   }
 
   addExpense() {
-    const dialogRef = this.dialog.open(ExpenseFormDialogComponent, { data: { projectId: this.projectId } });
+    const dialogRef = this.dialog.open(ExpenseFormDialogComponent, {
+      data: { projectId: this.projectId, shareholderCount: this.commitments().length },
+    });
     dialogRef.afterClosed().subscribe((payload) => {
       if (!payload) return;
       this.expenseService.create(payload).subscribe(() => {
         this.snackBar.open('Expense added', 'Dismiss', { duration: 3000 });
         this.loadReport();
         this.loadExpenses();
+        if (payload.SplitAmongShareholders) {
+          this.loadFunding();
+        }
       });
     });
   }
 
   editExpense(expense: Expense) {
-    const dialogRef = this.dialog.open(ExpenseFormDialogComponent, { data: { projectId: this.projectId, expense } });
+    const dialogRef = this.dialog.open(ExpenseFormDialogComponent, {
+      data: { projectId: this.projectId, expense, shareholderCount: this.commitments().length },
+    });
     dialogRef.afterClosed().subscribe((payload) => {
       if (!payload) return;
       this.expenseService.update(expense._id, payload).subscribe(() => {
         this.snackBar.open('Expense updated', 'Dismiss', { duration: 3000 });
         this.loadReport();
         this.loadExpenses();
+        if (payload.SplitAmongShareholders || expense.HasShares) {
+          this.loadFunding();
+        }
       });
     });
   }
@@ -215,6 +225,9 @@ export class ProjectDetailComponent {
       this.expenseService.delete(expense._id).subscribe(() => {
         this.loadReport();
         this.loadExpenses();
+        if (expense.HasShares) {
+          this.loadFunding();
+        }
       });
     });
   }
