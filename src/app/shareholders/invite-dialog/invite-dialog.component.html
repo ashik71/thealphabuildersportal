@@ -32,27 +32,31 @@
           <mat-icon>mark_email_read</mat-icon>
           Sent to {{ data.shareholder.Email }}
         </p>
+
+        <p class="invite__note">
+          Valid until {{ expiresAt() | date: 'medium' }}, and usable only once.
+        </p>
       } @else {
         <p class="invite__status invite__status--manual">
           <mat-icon>link</mat-icon>
           Email is not configured yet — send this link manually.
         </p>
+
+        <div class="invite__link">
+          <code>{{ inviteUrl() }}</code>
+        </div>
+
+        <button mat-flat-button color="primary" type="button" (click)="copyLink()">
+          <mat-icon>{{ copied() ? 'check' : 'content_copy' }}</mat-icon>
+          {{ copied() ? 'Copied' : 'Copy link' }}
+        </button>
+
+        <p class="invite__note">
+          Valid until {{ expiresAt() | date: 'medium' }}, and usable only once. This link is
+          shown here only now — it is not stored, so copy it before closing. If you lose it,
+          simply send a new invitation.
+        </p>
       }
-
-      <div class="invite__link">
-        <code>{{ inviteUrl() }}</code>
-      </div>
-
-      <button mat-flat-button color="primary" type="button" (click)="copyLink()">
-        <mat-icon>{{ copied() ? 'check' : 'content_copy' }}</mat-icon>
-        {{ copied() ? 'Copied' : 'Copy link' }}
-      </button>
-
-      <p class="invite__note">
-        Valid until {{ expiresAt() | date: 'medium' }}, and usable only once. This link is
-        shown here only now — it is not stored, so copy it before closing. If you lose it,
-        simply send a new invitation.
-      </p>
     </div>
   }
 </mat-dialog-content>
