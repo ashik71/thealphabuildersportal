@@ -42,6 +42,25 @@
       <mat-label>Notes</mat-label>
       <textarea matInput formControlName="Notes" rows="2"></textarea>
     </mat-form-field>
+
+    @if (canSplit) {
+      <div class="expense-split">
+        <mat-slide-toggle formControlName="SplitAmongShareholders">
+          Add this expense to every shareholder
+        </mat-slide-toggle>
+
+        @if (form.controls.SplitAmongShareholders.value) {
+          <p class="expense-split__preview">
+            Splits equally across {{ data.shareholderCount }} shareholder{{ data.shareholderCount === 1 ? '' : 's' }}
+            — about {{ perShareholderAmount() | number: '1.0-2' }} each.
+          </p>
+
+          <mat-checkbox formControlName="MarkSharesPaid">Mark each share as already paid</mat-checkbox>
+        }
+      </div>
+    } @else if (!data.expense && (data.shareholderCount ?? 0) === 0) {
+      <p class="expense-split__hint">Add a shareholder commitment to this project to split expenses among them.</p>
+    }
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">

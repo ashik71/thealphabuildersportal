@@ -33,4 +33,8 @@ export interface ExpenseInput {
   Amount: number;
   PaidTo?: string;
   Notes?: string;
+  /** Splits Amount equally across every shareholder committed to this project. */
+  SplitAmongShareholders?: boolean;
+  /** Only meaningful alongside SplitAmongShareholders — records each share as already paid. */
+  MarkSharesPaid?: boolean;
 }

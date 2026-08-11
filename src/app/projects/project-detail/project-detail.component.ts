@@ -183,13 +183,18 @@ export class ProjectDetailComponent {
   }
 
   addExpense() {
-    const dialogRef = this.dialog.open(ExpenseFormDialogComponent, { data: { projectId: this.projectId } });
+    const dialogRef = this.dialog.open(ExpenseFormDialogComponent, {
+      data: { projectId: this.projectId, shareholderCount: this.commitments().length },
+    });
     dialogRef.afterClosed().subscribe((payload) => {
       if (!payload) return;
       this.expenseService.create(payload).subscribe(() => {
         this.snackBar.open('Expense added', 'Dismiss', { duration: 3000 });
         this.loadReport();
         this.loadExpenses();
+        if (payload.SplitAmongShareholders) {
+          this.loadFunding();
+        }
       });
     });
   }
