@@ -1,7 +1,10 @@
 // Champagne Ledger palette (ported from the-alpha-builders-mobile's brand
 // theme) — scoped locally rather than swapping the global Material theme,
-// which is shared with the admin views.
-:host {
+// which is shared with the admin views. PortalThemeService sets
+// data-portal-theme on <html>; :host can't match an ancestor attribute, so
+// the token block targets :root instead and is scoped by the (unused-outside-
+// portal) --portal-* names rather than by selector.
+:root {
   --portal-bg: #faf6ec;
   --portal-surface: #ffffff;
   --portal-primary: #7a5c10;
@@ -16,10 +19,28 @@
   --portal-shadow: rgba(20, 32, 29, 0.08);
 }
 
+:root[data-portal-theme='dark'] {
+  --portal-bg: #171410;
+  --portal-surface: #221e16;
+  --portal-primary: #d9b84a;
+  --portal-accent: #d9b84a;
+  --portal-ink: #efe9d8;
+  --portal-ink-muted: #a79d85;
+  --portal-divider: #33301f;
+  --portal-success: #79b98f;
+  --portal-success-bg: #1f3328;
+  --portal-warning: #e0a45c;
+  --portal-warning-bg: #40350f;
+  --portal-shadow: rgba(0, 0, 0, 0.35);
+}
+
 .portal {
   min-height: 100dvh;
   background: var(--portal-bg);
   color: var(--portal-ink);
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
 
   &__bar {
     position: sticky;
@@ -58,7 +79,7 @@
   &__menu-email {
     padding: 0.5rem 1rem;
     font-size: 0.8125rem;
-    color: var(--mat-sys-on-surface-variant);
+    color: var(--portal-ink-muted);
     overflow-wrap: anywhere;
   }
 

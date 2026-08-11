@@ -6,6 +6,15 @@
     </span>
     <span class="portal__spacer"></span>
 
+    <button
+      mat-icon-button
+      type="button"
+      (click)="themeService.toggle()"
+      [attr.aria-label]="theme() === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'"
+    >
+      <mat-icon>{{ theme() === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+
     <button mat-button [matMenuTriggerFor]="menu" class="portal__account">
       <mat-icon>account_circle</mat-icon>
       <span class="portal__name">{{ user()?.name }}</span>
