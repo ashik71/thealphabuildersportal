@@ -102,10 +102,11 @@ export class ShareholderListComponent {
 
   /**
    * A portal account is keyed to the shareholder's email address, so there is
-   * nothing to invite without one.
+   * nothing to invite without one. Already-onboarded shareholders don't need
+   * a new invite either.
    */
   canInvite(shareholder: Shareholder) {
-    return !!shareholder.Email;
+    return !!shareholder.Email && !shareholder.HasAccount;
   }
 
   openInviteDialog(shareholder: Shareholder) {
@@ -115,7 +116,11 @@ export class ShareholderListComponent {
       });
       return;
     }
-    this.dialog.open(InviteDialogComponent, { data: { shareholder }, width: '520px' });
+    const dialogRef = this.dialog.open(InviteDialogComponent, {
+      data: { shareholder },
+      width: '520px',
+    });
+    dialogRef.afterClosed().subscribe(() => this.refresh());
   }
 
   deleteShareholder(shareholder: Shareholder) {
