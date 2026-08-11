@@ -32,12 +32,7 @@
     }
   }
 
-  &__active-chip {
-    background-color: var(--mat-sys-tertiary-container) !important;
-    color: var(--mat-sys-on-tertiary-container) !important;
-
-    mat-icon {
-      color: var(--mat-sys-on-tertiary-container) !important;
-    }
+  &__active-icon {
+    color: var(--mat-sys-tertiary) !important;
   }
 }
