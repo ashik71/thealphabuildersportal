@@ -1,29 +1,11 @@
-<mat-toolbar class="app-header">
+<header class="mobile-bar">
   <button
-    mat-icon-button
-    class="app-header__menu-toggle"
+    class="mobile-bar__toggle"
+    type="button"
     aria-label="Toggle navigation menu"
     (click)="layout.toggleSidebar()"
   >
     <mat-icon>menu</mat-icon>
   </button>
-
-  <span class="app-header__brand">
-    <app-logo-mark [size]="26" [inline]="true" gap="var(--mat-sys-surface, #fff)" />
-    <span class="app-header__brand-text">Sukun Builders</span>
-  </span>
-
-  <span class="app-header__spacer"></span>
-
-  <button mat-icon-button [matMenuTriggerFor]="userMenu" aria-label="Account menu">
-    <span class="app-header__avatar">{{ initials() }}</span>
-  </button>
-
-  <mat-menu #userMenu="matMenu">
-    <div class="app-header__menu-email">{{ currentUser()?.email }}</div>
-    <button mat-menu-item (click)="logout()">
-      <mat-icon>logout</mat-icon>
-      <span>Logout</span>
-    </button>
-  </mat-menu>
-</mat-toolbar>
+  <span class="mobile-bar__brand">Sukun Builders</span>
+</header>

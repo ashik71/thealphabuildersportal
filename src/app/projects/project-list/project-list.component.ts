@@ -1,10 +1,8 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -22,10 +20,8 @@ import { Project } from '../../interfaces/project.interface';
   standalone: true,
   imports: [
     DecimalPipe,
-    MatTableModule,
     MatButtonModule,
     MatIconModule,
-    MatChipsModule,
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
@@ -41,7 +37,6 @@ export class ProjectListComponent {
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
 
-  readonly displayedColumns = ['Name', 'Location', 'Status', 'EstimatedCost', 'ActualCost', 'actions'];
   readonly loading = signal(true);
   readonly searchTerm = signal('');
 
@@ -54,6 +49,13 @@ export class ProjectListComponent {
     return list.filter(
       (p) => p.Name.toLowerCase().includes(term) || (p.Location ?? '').toLowerCase().includes(term)
     );
+  });
+
+  readonly totals = computed(() => {
+    const list = this.filteredProjects();
+    const estimated = list.reduce((sum, p) => sum + (p.EstimatedCost || 0), 0);
+    const actual = list.reduce((sum, p) => sum + (p.ActualCost || 0), 0);
+    return { estimated, actual, usedPct: estimated > 0 ? Math.round((actual / estimated) * 1000) / 10 : 0 };
   });
 
   constructor() {
@@ -139,5 +141,28 @@ export class ProjectListComponent {
       default:
         return 'primary';
     }
+  }
+
+  statusLabel(status: string) {
+    switch (status) {
+      case 'in-progress':
+        return 'In Progress';
+      case 'on-hold':
+        return 'On Hold';
+      case 'completed':
+        return 'Completed';
+      default:
+        return 'Planned';
+    }
+  }
+
+  usedPct(project: Project): number {
+    const est = project.EstimatedCost || 0;
+    if (est <= 0) return 0;
+    return Math.round(((project.ActualCost || 0) / est) * 1000) / 10;
+  }
+
+  isOverBudget(project: Project): boolean {
+    return project.ActualCost > project.EstimatedCost;
   }
 }

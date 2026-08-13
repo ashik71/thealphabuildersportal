@@ -1,9 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -23,10 +21,8 @@ import { Project } from '../../interfaces/project.interface';
   selector: 'app-shareholder-list',
   standalone: true,
   imports: [
-    MatTableModule,
     MatButtonModule,
     MatIconModule,
-    MatChipsModule,
     MatFormFieldModule,
     MatSelectModule,
     MatProgressSpinnerModule,
@@ -42,7 +38,6 @@ export class ShareholderListComponent {
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
 
-  readonly displayedColumns = ['Name', 'Phone', 'Email', 'Projects', 'actions'];
   readonly loading = signal(true);
   readonly shareholders = signal<Shareholder[]>([]);
   readonly projectFilter = signal('');

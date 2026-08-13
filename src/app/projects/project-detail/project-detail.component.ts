@@ -1,8 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -22,14 +20,32 @@ import { Project, ProjectCostReport } from '../../interfaces/project.interface';
 import { Commitment, Payment, ProjectFunding } from '../../interfaces/funding.interface';
 import { Expense } from '../../interfaces/expense.interface';
 
+type DetailTab = 'cost' | 'expenses' | 'funding';
+
+interface SubcategorySpend {
+  name: string;
+  amount: number;
+}
+
+interface CategorySpend {
+  categoryId: string;
+  name: string;
+  amount: number;
+  /** Share of this project's total actual spend, 0-100. */
+  pct: number;
+  /** Subcategories under this category, same-named ones merged and summed
+   *  — the backend keys breakdown rows by subcategory _id, so two
+   *  differently-created "Cement" records would otherwise show up as two
+   *  separate lines instead of one. */
+  subcategories: SubcategorySpend[];
+}
+
 @Component({
   selector: 'app-project-detail',
   standalone: true,
   imports: [
     DecimalPipe,
     DatePipe,
-    MatTabsModule,
-    MatTableModule,
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
@@ -59,27 +75,54 @@ export class ProjectDetailComponent {
   readonly payments = signal<Payment[]>([]);
   readonly expenses = signal<Expense[]>([]);
 
-  readonly commitmentColumns = ['shareholder', 'amount', 'notes', 'actions'];
-  readonly paymentColumns = ['shareholder', 'category', 'subcategory', 'amount', 'date', 'notes', 'actions'];
-  readonly expenseColumns = ['category', 'subcategory', 'estimated', 'actual'];
-  readonly expenseRowColumns = ['date', 'category', 'subcategory', 'description', 'amount', 'paidTo', 'actions'];
+  readonly activeTab = signal<DetailTab>('cost');
 
-  readonly reportExpenseColumns = ['date', 'category', 'subcategory', 'description', 'amount', 'paidTo'];
-  readonly reportCommitmentColumns = ['shareholder', 'amount', 'notes'];
-  readonly reportPaymentColumns = ['shareholder', 'category', 'subcategory', 'amount', 'date', 'notes'];
-  readonly shareholderSummaryColumns = ['shareholder', 'committed', 'paid', 'remaining'];
-  readonly shareholderCategoryColumns = ['shareholder', 'category', 'subcategory', 'amount'];
+  /**
+   * Where the money went, grouped at the level that's actually meaningful:
+   * top-level category. There is no per-category budget in this product —
+   * only a single estimate for the whole project — so this compares
+   * categories to each other by actual spend, not to a budget that doesn't
+   * exist. Subcategories are rolled up under their parent and merged by
+   * name, so a subcategory that got created twice under the same name
+   * (a data-entry duplicate, not a real second line item) reads as one row
+   * with a combined total instead of two separate, misleadingly-equal bars.
+   */
+  readonly categorySpend = computed<CategorySpend[]>(() => {
+    const breakdown = this.report()?.Breakdown ?? [];
 
-  readonly shareholderCategoryRows = computed(() => {
-    const shareholders = this.funding()?.Shareholders ?? [];
-    return shareholders.flatMap((s) =>
-      (s.Categories ?? []).map((c) => ({
-        shareholder: s.ShareholderName || 'Unknown',
-        category: c.CategoryName,
-        subcategory: c.SubCategoryName || '—',
-        amount: c.Amount,
+    const byCategory = new Map<string, { name: string; amount: number; subMap: Map<string, number> }>();
+    for (const item of breakdown) {
+      const amount = item.ActualCost || 0;
+      let group = byCategory.get(item.CategoryId);
+      if (!group) {
+        group = { name: item.CategoryName, amount: 0, subMap: new Map() };
+        byCategory.set(item.CategoryId, group);
+      }
+      group.amount += amount;
+      if (item.SubcategoryName) {
+        group.subMap.set(item.SubcategoryName, (group.subMap.get(item.SubcategoryName) || 0) + amount);
+      }
+    }
+
+    const total = [...byCategory.values()].reduce((sum, g) => sum + g.amount, 0);
+
+    return [...byCategory.entries()]
+      .map(([categoryId, group]) => ({
+        categoryId,
+        name: group.name,
+        amount: group.amount,
+        pct: total > 0 ? (group.amount / total) * 100 : 0,
+        subcategories: [...group.subMap.entries()]
+          .map(([name, amount]) => ({ name, amount }))
+          .sort((a, b) => b.amount - a.amount),
       }))
-    );
+      .sort((a, b) => b.amount - a.amount);
+  });
+
+  readonly fundingProgressPct = computed(() => {
+    const f = this.funding();
+    if (!f || f.Totals.Committed <= 0) return 0;
+    return Math.min(100, Math.round((f.Totals.Paid / f.Totals.Committed) * 1000) / 10);
   });
 
   constructor() {
@@ -127,6 +170,30 @@ export class ProjectDetailComponent {
       a.click();
       window.URL.revokeObjectURL(url);
     });
+  }
+
+  statusTone(status: string) {
+    switch (status) {
+      case 'completed':
+        return 'success';
+      case 'on-hold':
+        return 'warn';
+      default:
+        return 'primary';
+    }
+  }
+
+  statusLabel(status: string) {
+    switch (status) {
+      case 'in-progress':
+        return 'In Progress';
+      case 'on-hold':
+        return 'On Hold';
+      case 'completed':
+        return 'Completed';
+      default:
+        return 'Planned';
+    }
   }
 
   shareholderName(shareholderId: Commitment['ShareholderId']) {

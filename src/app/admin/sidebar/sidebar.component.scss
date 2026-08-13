@@ -1,20 +1,32 @@
-.sidebar {
-  width: 260px;
-  flex-shrink: 0;
+.rail {
+  width: var(--sb-rail);
+  flex: 0 0 var(--sb-rail);
   height: 100%;
-  background: var(--mat-sys-surface-container-low);
-  border-right: 1px solid var(--mat-sys-outline-variant);
-  padding: 1rem 0.75rem;
+  background: var(--sb-panel-sunk);
+  border-right: 1px solid var(--sb-line);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 3px;
+    background: repeating-linear-gradient(to bottom, var(--sb-line-strong) 0 1px, transparent 1px 16px);
+    opacity: 0.55;
+  }
 
   @media (max-width: 768px) {
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1000;
-    width: 260px;
     max-width: 80vw;
     transform: translateX(-100%);
-    box-shadow: var(--mat-sys-level3);
+    box-shadow: var(--sb-shadow-lg);
     transition: transform 0.2s ease;
 
     &--open {
@@ -22,31 +34,165 @@
     }
   }
 
-  &__nav {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  &__link {
+  &__brand {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.625rem 0.875rem;
-    border-radius: 999px;
-    color: var(--mat-sys-on-surface-variant);
+    gap: 10px;
+    height: var(--sb-topbar);
+    padding: 0 16px;
+    border-bottom: 1px solid var(--sb-line);
+    flex: 0 0 auto;
+  }
+
+  &__mark {
+    color: var(--sb-gold);
+  }
+
+  &__brand-name {
+    font-family: var(--sb-display);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--sb-ink);
+    line-height: 1;
+  }
+
+  &__brand-sub {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sb-ink-faint);
+    line-height: 1;
+    margin-top: 3px;
+  }
+
+  &__nav {
+    padding: 14px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  &__nav-label {
+    font-size: 9.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sb-ink-faint);
+    padding: 8px 8px 6px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 9px 10px;
+    border-radius: var(--sb-r-md);
+    color: var(--sb-ink-mid);
     text-decoration: none;
-    font-size: 0.9375rem;
+    font-size: 13.5px;
     font-weight: 500;
-    transition: background-color 0.15s ease;
+    border-left: 2px solid transparent;
 
     &:hover {
-      background: var(--mat-sys-surface-container-highest);
+      background: var(--sb-gold-wash);
+      color: var(--sb-ink);
     }
 
-    &--active {
-      background: var(--mat-sys-secondary-container);
-      color: var(--mat-sys-on-secondary-container);
+    &--on {
+      background: var(--sb-gold-wash);
+      border-left-color: var(--sb-gold);
+      color: var(--sb-gold);
+      font-weight: 600;
     }
+  }
+
+  &__icon {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    font-size: 18px;
+  }
+
+  &__foot {
+    margin-top: auto;
+    padding: 10px 14px 14px;
+    border-top: 1px solid var(--sb-line);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 8px 10px;
+    margin: 4px 0 2px;
+    border: none;
+    background: none;
+    border-radius: var(--sb-r-md);
+    color: var(--sb-ink-muted);
+    font-family: var(--sb-body);
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+
+    &:hover {
+      background: var(--sb-gold-wash);
+      color: var(--sb-ink);
+    }
+  }
+
+  &__who {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 4px;
+    border: none;
+    background: none;
+    border-radius: var(--sb-r-md);
+    cursor: pointer;
+    text-align: left;
+
+    &:hover {
+      background: var(--sb-gold-wash);
+    }
+  }
+
+  &__who-text {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__avatar {
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+    border-radius: 50%;
+    background: var(--sb-gold);
+    color: var(--sb-on-gold);
+    display: grid;
+    place-items: center;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  &__name {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--sb-ink);
+  }
+
+  &__mail {
+    font-size: 11px;
+    color: var(--sb-ink-faint);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }

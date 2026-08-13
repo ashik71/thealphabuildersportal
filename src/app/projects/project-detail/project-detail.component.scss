@@ -5,47 +5,41 @@
     padding: 3rem;
   }
 
-  &__stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin: 1.5rem 0;
-  }
-
-  &__section-title {
-    font-size: 1rem;
-    font-weight: 600;
-    margin: 1.5rem 0 0.75rem;
-    color: var(--mat-sys-on-surface);
-  }
-
-  &__table-wrap {
-    border-radius: 16px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    box-shadow: var(--mat-sys-level1);
-    margin-bottom: 1rem;
-  }
-
-  &__table {
-    width: 100%;
-    min-width: 560px;
-  }
-
-  &__over-budget {
-    color: var(--mat-sys-error);
-    font-weight: 600;
-  }
-
   &__empty {
-    color: var(--mat-sys-on-surface-variant);
+    color: var(--sb-ink-muted);
+    font-size: 13px;
+    padding: 16px;
   }
 
   &__funding-actions {
     display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
     flex-wrap: wrap;
-    gap: 0.75rem;
-    margin: 1.25rem 0;
   }
+
+  &__fab-row {
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  // Subcategory line under its parent category row in the cost breakdown —
+  // indented and smaller so it reads as detail, not a peer category.
+  &__sub-row {
+    padding-left: 28px !important;
+    font-size: 12px;
+
+    &::before {
+      content: '–';
+      margin-right: 6px;
+      color: var(--sb-line-strong);
+    }
+  }
+}
+
+.status-chip--large {
+  height: 30px;
+  padding: 0 10px 0 8px;
+  font-size: 11px;
 }

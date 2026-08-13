@@ -1,52 +1,40 @@
-.app-header {
-  background: var(--mat-sys-surface-container);
-  color: var(--mat-sys-on-surface);
-  border-bottom: 1px solid var(--mat-sys-outline-variant);
+.mobile-bar {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  height: var(--sb-topbar);
+  padding: 0 14px;
+  background: var(--sb-panel);
+  border-bottom: 1px solid var(--sb-line);
+  flex: 0 0 auto;
 
-  &__menu-toggle {
-    display: none;
-    margin-right: 0.25rem;
+  @media (max-width: 768px) {
+    display: flex;
+  }
 
-    @media (max-width: 768px) {
-      display: inline-flex;
+  &__toggle {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border: none;
+    background: none;
+    border-radius: var(--sb-r-sm);
+    color: var(--sb-ink-mid);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--sb-gold);
+      background: var(--sb-gold-wash);
     }
   }
 
   &__brand {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    font-family: var(--sb-display);
+    font-size: 16px;
     font-weight: 600;
-    letter-spacing: 0.01em;
-    white-space: nowrap;
-  }
-
-  &__brand-text {
-    @media (max-width: 360px) {
-      display: none;
-    }
-  }
-
-  &__spacer {
-    flex: 1 1 auto;
-  }
-
-  &__avatar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--mat-sys-primary);
-    color: var(--mat-sys-on-primary);
-    font-weight: 600;
-    font-size: 0.875rem;
-  }
-
-  &__menu-email {
-    padding: 0.5rem 1rem;
-    font-size: 0.8125rem;
-    color: var(--mat-sys-on-surface-variant);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--sb-ink);
   }
 }

@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { AuthService } from '../../services/auth.service';
-import { PortalThemeService } from '../../services/portal-theme.service';
+import { ThemeService } from '../../services/theme.service';
 import { LogoMarkComponent } from '../../shared/components/logo-mark/logo-mark.component';
 import { AvatarComponent } from '../../shared/components/avatar/avatar.component';
 
@@ -31,7 +31,7 @@ import { AvatarComponent } from '../../shared/components/avatar/avatar.component
 export class PortalLayoutComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
-  readonly themeService = inject(PortalThemeService);
+  readonly themeService = inject(ThemeService);
 
   readonly user = this.auth.currentUser;
   readonly theme = this.themeService.theme;
