@@ -1,15 +1,17 @@
-<app-page-header title="Sukun Builders" subtitle="All construction projects">
+<app-page-header title="Projects" subtitle="All construction projects">
   <button mat-flat-button color="primary" (click)="openCreateDialog()">
     <mat-icon>add</mat-icon>
     New Project
   </button>
 </app-page-header>
 
-<mat-form-field appearance="outline" class="project-list__search">
-  <mat-label>Search projects</mat-label>
-  <input matInput [value]="searchTerm()" (input)="searchTerm.set($any($event.target).value)" />
-  <mat-icon matSuffix>search</mat-icon>
-</mat-form-field>
+<div class="list-toolbar">
+  <mat-form-field appearance="outline" class="list-toolbar__search">
+    <mat-label>Search projects</mat-label>
+    <input matInput [value]="searchTerm()" (input)="searchTerm.set($any($event.target).value)" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+</div>
 
 @if (loading()) {
   <div class="project-list__loading">
@@ -18,52 +20,105 @@
 } @else if (filteredProjects().length === 0) {
   <p class="project-list__empty">No projects match your search.</p>
 } @else {
-  <div class="project-list__table-wrap">
-    <table mat-table [dataSource]="filteredProjects()" class="project-list__table">
-      <ng-container matColumnDef="Name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
-        <td mat-cell *matCellDef="let p">{{ p.Name }}</td>
-      </ng-container>
+  <div class="table-responsive">
+    <section class="panel table-responsive__desktop">
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Location</th>
+              <th>Status</th>
+              <th class="num">Estimated</th>
+              <th class="num">Actual</th>
+              <th class="num">Used</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of filteredProjects(); track p._id) {
+              <tr
+                class="stripe tbl__row--clickable"
+                [style.--stripe-tone]="isOverBudget(p) ? 'var(--sb-over)' : 'var(--sb-gold)'"
+                (click)="openDetails(p._id)"
+              >
+                <td class="t-name">{{ p.Name }}</td>
+                <td class="t-muted">{{ p.Location || '—' }}</td>
+                <td>
+                  <span class="status-chip" [class]="'status-chip--' + statusTone(p.Status)">
+                    {{ statusLabel(p.Status) }}
+                  </span>
+                </td>
+                <td class="num">{{ p.EstimatedCost | number: '1.0-0' }}</td>
+                <td class="num" [class.num--over]="isOverBudget(p)">{{ p.ActualCost | number: '1.0-0' }}</td>
+                <td class="num" [class.num--over]="isOverBudget(p)">{{ usedPct(p) }}%</td>
+                <td>
+                  <div class="rowacts">
+                    <button class="iconbtn" type="button" (click)="generateLink(p, $event)" matTooltip="Copy view-only link">
+                      <mat-icon>link</mat-icon>
+                    </button>
+                    <button class="iconbtn" type="button" (click)="openEditDialog(p, $event)" matTooltip="Edit">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button class="iconbtn" type="button" (click)="deleteProject(p, $event)" matTooltip="Delete">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="3">{{ filteredProjects().length }} project{{ filteredProjects().length === 1 ? '' : 's' }}</td>
+              <td class="num">{{ totals().estimated | number: '1.0-0' }}</td>
+              <td class="num">{{ totals().actual | number: '1.0-0' }}</td>
+              <td class="num">{{ totals().usedPct }}%</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
 
-      <ng-container matColumnDef="Location">
-        <th mat-header-cell *matHeaderCellDef>Location</th>
-        <td mat-cell *matCellDef="let p">{{ p.Location || '—' }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="Status">
-        <th mat-header-cell *matHeaderCellDef>Status</th>
-        <td mat-cell *matCellDef="let p">
-          <mat-chip [class]="'status-chip status-chip--' + statusTone(p.Status)">{{ p.Status }}</mat-chip>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="EstimatedCost">
-        <th mat-header-cell *matHeaderCellDef>Estimated</th>
-        <td mat-cell *matCellDef="let p">{{ p.EstimatedCost | number: '1.0-0' }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="ActualCost">
-        <th mat-header-cell *matHeaderCellDef>Actual</th>
-        <td mat-cell *matCellDef="let p">{{ p.ActualCost | number: '1.0-0' }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let p">
-          <button mat-icon-button (click)="generateLink(p, $event)" matTooltip="Copy view-only link">
-            <mat-icon>link</mat-icon>
-          </button>
-          <button mat-icon-button (click)="openEditDialog(p, $event)" matTooltip="Edit">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button (click)="deleteProject(p, $event)" matTooltip="Delete">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openDetails(row._id)"></tr>
-    </table>
+    <div class="mcards table-responsive__mobile">
+      @for (p of filteredProjects(); track p._id) {
+        <div class="mcard" (click)="openDetails(p._id)">
+          <div class="mcard__top">
+            <div>
+              <h4 class="mcard__name">{{ p.Name }}</h4>
+              <p class="mcard__where">{{ p.Location || '—' }}</p>
+            </div>
+            <span class="status-chip" [class]="'status-chip--' + statusTone(p.Status)" style="margin-left: auto">
+              {{ statusLabel(p.Status) }}
+            </span>
+          </div>
+          <div class="mcard__bar">
+            <i [class.mcard__bar--over]="isOverBudget(p)" [style.width.%]="usedPct(p)"></i>
+          </div>
+          <div class="mcard__grid">
+            <div class="mcard__cell">
+              <span>Estimated</span>
+              <b>{{ p.EstimatedCost | number: '1.0-0' }}</b>
+            </div>
+            <div class="mcard__cell">
+              <span>Actual</span>
+              <b [class.over]="isOverBudget(p)">{{ p.ActualCost | number: '1.0-0' }}</b>
+            </div>
+          </div>
+          <div class="mcard__acts">
+            <button class="iconbtn" type="button" (click)="generateLink(p, $event)" aria-label="Copy view-only link">
+              <mat-icon>link</mat-icon>
+            </button>
+            <button class="iconbtn" type="button" (click)="openEditDialog(p, $event)" aria-label="Edit">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button class="iconbtn" type="button" (click)="deleteProject(p, $event)" aria-label="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
   </div>
 }

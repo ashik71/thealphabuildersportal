@@ -1,6 +1,6 @@
 .pv-view {
   min-height: 100vh;
-  background: var(--mat-sys-surface-container-low);
+  background: var(--sb-panel-sunk);
 
   &__loading,
   &__center {
@@ -23,13 +23,13 @@
     font-size: 2.5rem;
     width: 2.5rem;
     height: 2.5rem;
-    color: var(--mat-sys-on-surface-variant);
+    color: var(--sb-ink-muted);
     margin-bottom: 0.5rem;
   }
 
   &__hero {
-    background: linear-gradient(135deg, var(--mat-sys-primary) 0%, var(--mat-sys-tertiary) 100%);
-    color: var(--mat-sys-on-primary);
+    background: linear-gradient(135deg, var(--sb-gold) 0%, var(--sb-gold-bright) 100%);
+    color: var(--sb-on-gold);
     padding: 3rem 1.5rem 4rem;
   }
 
@@ -88,7 +88,7 @@
   &__progress-card {
     border-radius: 24px;
     padding: 1.75rem;
-    box-shadow: var(--mat-sys-level3, 0 4px 16px rgba(0, 0, 0, 0.12));
+    box-shadow: var(--sb-shadow-lg, 0 4px 16px rgba(0, 0, 0, 0.12));
   }
 
   &__progress-header {
@@ -102,7 +102,7 @@
 
   &__progress-label {
     font-weight: 600;
-    color: var(--mat-sys-on-surface-variant);
+    color: var(--sb-ink-muted);
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -115,7 +115,7 @@
     gap: 0.25rem;
     font-size: 0.8rem;
     font-weight: 500;
-    background: var(--mat-sys-surface-container-high);
+    background: var(--sb-panel-sunk);
     padding: 0.15rem 0.6rem;
     border-radius: 999px;
   }
@@ -123,10 +123,10 @@
   &__progress-percent {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--mat-sys-primary);
+    color: var(--sb-gold);
 
     &--warn {
-      color: var(--mat-sys-error);
+      color: var(--sb-over);
     }
   }
 
@@ -144,27 +144,27 @@
   }
 
   &__stat-icon {
-    color: var(--mat-sys-primary);
-    background: var(--mat-sys-primary-container);
+    color: var(--sb-gold);
+    background: var(--sb-gold-wash);
     border-radius: 50%;
     padding: 0.5rem;
     box-sizing: content-box;
 
     &--success {
-      color: var(--mat-sys-tertiary);
-      background: var(--mat-sys-tertiary-container);
+      color: var(--sb-good);
+      background: var(--sb-good-wash);
     }
 
     &--warn {
-      color: var(--mat-sys-error);
-      background: var(--mat-sys-error-container);
+      color: var(--sb-over);
+      background: var(--sb-over-wash);
     }
   }
 
   &__stat-label {
     display: block;
     font-size: 0.75rem;
-    color: var(--mat-sys-on-surface-variant);
+    color: var(--sb-ink-muted);
   }
 
   &__stat-value {
@@ -173,7 +173,7 @@
     font-weight: 700;
 
     &--warn {
-      color: var(--mat-sys-error);
+      color: var(--sb-over);
     }
   }
 
@@ -190,7 +190,7 @@
   &__empty-card {
     padding: 2rem;
     text-align: center;
-    color: var(--mat-sys-on-surface-variant);
+    color: var(--sb-ink-muted);
     border-radius: 20px;
 
     mat-icon {
@@ -218,7 +218,7 @@
 
   &__category-sub {
     font-size: 0.85rem;
-    color: var(--mat-sys-on-surface-variant);
+    color: var(--sb-ink-muted);
     margin-top: 0.1rem;
   }
 
@@ -232,17 +232,17 @@
   &__category-amount-label {
     display: block;
     font-size: 0.7rem;
-    color: var(--mat-sys-on-surface-variant);
+    color: var(--sb-ink-muted);
   }
 
   &__category-amount {
     display: block;
     font-size: 1.1rem;
     font-weight: 700;
-    color: var(--mat-sys-primary);
+    color: var(--sb-gold);
 
     &--warn {
-      color: var(--mat-sys-error);
+      color: var(--sb-over);
     }
   }
 }

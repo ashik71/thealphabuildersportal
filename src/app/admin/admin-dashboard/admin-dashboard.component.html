@@ -1,42 +1,132 @@
-<app-page-header title="Dashboard" subtitle="Portfolio overview across all projects"></app-page-header>
+<app-page-header title="Portfolio" [subtitle]="projectCount() + ' project' + (projectCount() === 1 ? '' : 's') + ' tracked'">
+</app-page-header>
 
 @if (loading()) {
   <div class="dashboard__loading">
     <mat-spinner diameter="36" />
   </div>
 } @else {
-  <div class="dashboard__stats">
-    <app-stat-card label="Total Sukun Builders" [value]="projectCount().toString()" icon="foundation" tone="primary" />
-    <app-stat-card label="In Progress" [value]="activeCount().toString()" icon="engineering" tone="primary" />
-    <app-stat-card label="Estimated Cost" [value]="(totalEstimated() | number: '1.0-0') ?? '0'" icon="request_quote" />
-    <app-stat-card label="Actual Cost" [value]="(totalActual() | number: '1.0-0') ?? '0'" icon="payments" tone="success" />
+  <div class="qty-schedule">
+    <app-stat-card
+      label="Projects"
+      [value]="projectCount().toString()"
+      [foot]="activeCount() + ' in progress · ' + completedCount() + ' complete'"
+      tone="primary"
+    />
+    <app-stat-card label="In Progress" [value]="activeCount().toString()" tone="primary" />
+    <app-stat-card
+      label="Estimated"
+      [value]="(totalEstimated() | number: '1.0-0') ?? '0'"
+      foot="Approved budget"
+    />
+    <app-stat-card
+      label="Actual"
+      [value]="(totalActual() | number: '1.0-0') ?? '0'"
+      [foot]="drawnPct() + '% of budget drawn'"
+      tone="success"
+    />
   </div>
 
-  <h2 class="dashboard__section-title">Recent Sukun Builders</h2>
+  @if (chartBars().length > 0) {
+    <section class="panel">
+      <div class="panel__head">
+        <h2 class="panel__title">Estimated vs Actual</h2>
+        <span class="panel__meta">Recent projects</span>
+      </div>
+      <div class="panel__body">
+        <div class="legend">
+          <span><i class="legend__dot legend__dot--est"></i> Estimated</span>
+          <span><i class="legend__dot legend__dot--ok"></i> Actual, within budget</span>
+          <span><i class="legend__dot legend__dot--over"></i> Over budget</span>
+        </div>
+
+        <svg
+          class="chart"
+          viewBox="0 0 600 250"
+          role="img"
+          [attr.aria-label]="'Estimated versus actual cost for ' + chartBars().length + ' projects.'"
+        >
+          <g class="chart__grid">
+            <line x1="10" y1="10" x2="590" y2="10" />
+            <line x1="10" y1="55" x2="590" y2="55" />
+            <line x1="10" y1="100" x2="590" y2="100" />
+            <line x1="10" y1="145" x2="590" y2="145" />
+            <line x1="10" y1="190" x2="590" y2="190" />
+          </g>
+          <line class="chart__axis" x1="10" y1="190" x2="590" y2="190" />
+
+          @for (bar of chartBars(); track bar.project._id; let i = $index) {
+            <g
+              [attr.transform]="'translate(' + (10 + i * chartGroupWidth() + chartGroupWidth() * 0.15) + ', 0)'"
+            >
+              <rect
+                class="chart__bar chart__bar--est"
+                x="0"
+                [attr.y]="barY(bar.estimatedPct)"
+                [attr.width]="chartGroupWidth() * 0.32"
+                [attr.height]="barHeight(bar.estimatedPct)"
+                rx="1"
+              />
+              <rect
+                [class]="'chart__bar ' + (bar.overBudget ? 'chart__bar--over' : 'chart__bar--ok')"
+                [attr.x]="chartGroupWidth() * 0.34"
+                [attr.y]="barY(bar.actualPct)"
+                [attr.width]="chartGroupWidth() * 0.32"
+                [attr.height]="barHeight(bar.actualPct)"
+                rx="1"
+              />
+              <text class="chart__cat" [attr.x]="chartGroupWidth() * 0.33" y="207" text-anchor="middle">
+                {{ bar.project.Name }}
+              </text>
+            </g>
+          }
+        </svg>
+      </div>
+    </section>
+  }
+
+  <div class="head head--sub">
+    <div class="head__row">
+      <h2 class="head__title">Recent Projects</h2>
+    </div>
+  </div>
 
   @if (recentProjects().length === 0) {
     <p class="dashboard__empty">No projects yet. Create your first project to get started.</p>
   } @else {
-    <div class="dashboard__grid">
+    <div class="dashboard__cards">
       @for (project of recentProjects(); track project._id) {
-        <mat-card class="dashboard__card" (click)="openProject(project._id)">
-          <mat-card-content>
-            <div class="dashboard__card-header">
-              <h3>{{ project.Name }}</h3>
-              <mat-chip [class]="'status-chip status-chip--' + statusTone(project.Status)">
-                {{ project.Status }}
-              </mat-chip>
+        <button class="pcard" type="button" (click)="openProject(project._id)">
+          <div class="pcard__top">
+            <h3 class="pcard__name">{{ project.Name }}</h3>
+            <span class="status-chip" [class]="'status-chip--' + statusTone(project.Status)">
+              {{ statusLabel(project.Status) }}
+            </span>
+          </div>
+          <p class="pcard__where">
+            <mat-icon inline>location_on</mat-icon>
+            {{ project.Location || 'No location set' }}
+          </p>
+          <div class="pcard__figs">
+            <div class="pcard__fig">
+              <span>Estimated</span>
+              <b class="sb-num">{{ project.EstimatedCost | number: '1.0-0' }}</b>
             </div>
-            <p class="dashboard__card-location">
-              <mat-icon inline>location_on</mat-icon>
-              {{ project.Location || 'No location set' }}
-            </p>
-            <div class="dashboard__card-costs">
-              <span>Est. {{ project.EstimatedCost | number: '1.0-0' }}</span>
-              <span>Actual {{ project.ActualCost | number: '1.0-0' }}</span>
+            <div class="pcard__fig pcard__fig--r">
+              <span>Actual</span>
+              <b class="sb-num" [class.pcard__fig--over]="project.ActualCost > project.EstimatedCost">
+                {{ project.ActualCost | number: '1.0-0' }}
+              </b>
             </div>
-          </mat-card-content>
-        </mat-card>
+          </div>
+          <div class="pcard__bar">
+            <i
+              [class.pcard__bar--over]="project.ActualCost > project.EstimatedCost"
+              [style.width.%]="progressPct(project)"
+            ></i>
+          </div>
+          <div class="pcard__pct">{{ progressPct(project) }}% of budget</div>
+        </button>
       }
     </div>
   }

@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--mat-sys-surface-container-low);
+  background: var(--sb-ground);
   padding: 1.5rem;
 }
 
@@ -11,27 +11,32 @@
   width: 100%;
   max-width: 400px;
   padding: 2rem;
-  border-radius: 20px;
+  border-radius: var(--sb-r-lg);
+  border: 1px solid var(--sb-line);
+  box-shadow: var(--sb-shadow-lg);
 
   &__brand {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.75rem;
-    color: var(--mat-sys-primary);
+    color: var(--sb-gold);
   }
 
   &__wordmark {
+    font-family: var(--sb-display);
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     line-height: 1.1;
+    color: var(--sb-ink);
   }
 
   &__subtitle {
     text-align: center;
-    color: var(--mat-sys-on-surface-variant);
+    color: var(--sb-ink-muted);
+    font-size: 13px;
     margin: 0.25rem 0 1.5rem;
   }
 
@@ -45,7 +50,7 @@
   }
 
   &__error {
-    color: var(--mat-sys-error);
+    color: var(--sb-over);
     font-size: 0.875rem;
     margin: 0 0 1rem;
   }

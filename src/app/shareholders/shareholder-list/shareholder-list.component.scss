@@ -1,10 +1,4 @@
 .shareholder-list {
-  &__filter {
-    width: 100%;
-    max-width: 280px;
-    margin-bottom: 1rem;
-  }
-
   &__loading {
     display: flex;
     justify-content: center;
@@ -12,27 +6,11 @@
   }
 
   &__empty {
-    color: var(--mat-sys-on-surface-variant);
-  }
-
-  &__table-wrap {
-    border-radius: 16px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    box-shadow: var(--mat-sys-level1);
-  }
-
-  &__table {
-    width: 100%;
-    min-width: 480px;
-
-    mat-chip {
-      margin: 2px;
-    }
+    color: var(--sb-ink-muted);
+    font-size: 13px;
   }
 
   &__active-icon {
-    color: var(--mat-sys-tertiary) !important;
+    color: var(--sb-good) !important;
   }
 }
