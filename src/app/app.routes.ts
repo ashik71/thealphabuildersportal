@@ -70,6 +70,11 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'investors',
+        loadComponent: () =>
+          import('./investors/investor-list/investor-list.component').then((m) => m.InvestorListComponent),
+      },
+      {
         path: 'cost-categories',
         loadComponent: () =>
           import('./cost-categories/cost-category-list/cost-category-list.component').then(

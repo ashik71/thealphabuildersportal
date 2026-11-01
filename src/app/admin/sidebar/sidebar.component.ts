@@ -33,6 +33,7 @@ export class SidebarComponent {
     { path: '/admin/dashboard', label: 'Dashboard', icon: 'space_dashboard' },
     { path: '/admin/projects', label: 'Projects', icon: 'foundation' },
     { path: '/admin/shareholders', label: 'Shareholders', icon: 'groups' },
+    { path: '/admin/investors', label: 'Investors', icon: 'account_balance' },
     { path: '/admin/cost-categories', label: 'Cost Categories', icon: 'category' },
   ];
 

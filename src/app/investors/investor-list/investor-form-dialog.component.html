@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit Investor' : 'New Investor' }}</h2>
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content class="form-stack">
+    <mat-form-field appearance="outline"><mat-label>Name</mat-label><input matInput formControlName="Name" /></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>Email</mat-label><input matInput type="email" formControlName="Email" /></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>Phone</mat-label><input matInput formControlName="Phone" /></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>Investment amount</mat-label><input matInput type="number" min="0" formControlName="InvestmentAmount" /></mat-form-field>
+    <mat-form-field appearance="outline"><mat-label>Status</mat-label>
+      <mat-select formControlName="Status"><mat-option value="active">Active</mat-option><mat-option value="inactive">Inactive</mat-option></mat-select>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end"><button mat-button type="button" (click)="cancel()">Cancel</button><button mat-flat-button color="primary" type="submit">{{ isEdit ? 'Save Changes' : 'Create' }}</button></mat-dialog-actions>
+</form>

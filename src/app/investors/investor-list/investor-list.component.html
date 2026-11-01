@@ -1,0 +1,36 @@
+<app-page-header title="Investors" subtitle="Track investor contacts and commitments">
+  <button mat-flat-button color="primary" (click)="openCreateDialog()"><mat-icon>add</mat-icon> New Investor</button>
+</app-page-header>
+
+<div class="list-toolbar">
+  <mat-form-field appearance="outline" class="list-toolbar__search">
+    <mat-label>Search investors</mat-label>
+    <input matInput [value]="filter()" (input)="filter.set($any($event.target).value)" placeholder="Name, email, or phone" />
+  </mat-form-field>
+</div>
+
+@if (loading()) {
+  <div class="investor-list__loading"><mat-spinner diameter="36" /></div>
+} @else if (error()) {
+  <div class="investor-list__empty">Could not load investors. <button mat-button color="primary" (click)="refresh()">Try again</button></div>
+} @else if (investors().length === 0) {
+  <p class="investor-list__empty">No investors yet. Add one to start your register.</p>
+} @else if (filteredInvestors().length === 0) {
+  <p class="investor-list__empty">No investors match your search.</p>
+} @else {
+  <section class="panel"><div class="tbl-wrap"><table class="tbl">
+    <thead><tr><th>Name</th><th>Contact</th><th>Investment amount</th><th>Status</th><th></th></tr></thead>
+    <tbody>@for (investor of filteredInvestors(); track investor._id) {
+      <tr>
+        <td class="t-name">{{ investor.Name }}</td>
+        <td><div>{{ investor.Email }}</div><div class="t-muted">{{ investor.Phone }}</div></td>
+        <td>{{ investor.InvestmentAmount | number:'1.2-2' }}</td>
+        <td><span class="tag">{{ investor.Status }}</span></td>
+        <td><div class="rowacts">
+          <button class="iconbtn" type="button" (click)="openEditDialog(investor)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+          <button class="iconbtn" type="button" (click)="deleteInvestor(investor)" matTooltip="Delete"><mat-icon>delete</mat-icon></button>
+        </div></td>
+      </tr>
+    }</tbody>
+  </table></div></section>
+}
