@@ -5,7 +5,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { DecimalPipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { InvestorService } from '../../services/investor.service';
@@ -17,7 +16,7 @@ import { InvestorFormDialogComponent } from './investor-form-dialog.component';
 @Component({
   selector: 'app-investor-list',
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatTooltipModule, DecimalPipe, PageHeaderComponent],
+  imports: [MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule, MatTooltipModule, PageHeaderComponent],
   templateUrl: './investor-list.component.html',
   styleUrl: './investor-list.component.scss',
 })

@@ -9,15 +9,15 @@ describe('InvestorListComponent', () => {
   let component: InvestorListComponent;
   const service = {
     getAll: jasmine.createSpy().and.returnValue(of([
-      { _id: '1', Name: 'Ada', Email: 'ada@example.com', Phone: '1234567', InvestmentAmount: 10, Status: 'active' },
-      { _id: '2', Name: 'Grace', Email: 'grace@example.com', Phone: '7654321', InvestmentAmount: 20, Status: 'inactive' },
+      { _id: '1', Name: 'Ada', Email: 'ada@example.com', Phone: '1234567', Status: 'active' },
+      { _id: '2', Name: 'Grace', Email: 'grace@example.com', Phone: '7654321', Status: 'inactive' },
     ])),
   };
 
   beforeEach(() => {
     service.getAll.and.returnValue(of([
-      { _id: '1', Name: 'Ada', Email: 'ada@example.com', Phone: '1234567', InvestmentAmount: 10, Status: 'active' },
-      { _id: '2', Name: 'Grace', Email: 'grace@example.com', Phone: '7654321', InvestmentAmount: 20, Status: 'inactive' },
+      { _id: '1', Name: 'Ada', Email: 'ada@example.com', Phone: '1234567', Status: 'active' },
+      { _id: '2', Name: 'Grace', Email: 'grace@example.com', Phone: '7654321', Status: 'inactive' },
     ]));
     TestBed.configureTestingModule({
       imports: [InvestorListComponent],

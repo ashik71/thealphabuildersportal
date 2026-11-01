@@ -22,7 +22,7 @@ export class InvestorFormDialogComponent {
     Name: [this.investor?.Name ?? '', Validators.required],
     Email: [this.investor?.Email ?? '', [Validators.email]],
     Phone: [this.investor?.Phone ?? '', [Validators.required, Validators.minLength(7)]],
-    InvestmentAmount: [this.investor?.InvestmentAmount ?? 0, [Validators.required, Validators.min(0)]],
+    Notes: [this.investor?.Notes ?? ''],
     Status: [this.investor?.Status ?? 'active', Validators.required],
   });
 

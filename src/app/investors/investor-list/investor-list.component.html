@@ -19,12 +19,12 @@
   <p class="investor-list__empty">No investors match your search.</p>
 } @else {
   <section class="panel"><div class="tbl-wrap"><table class="tbl">
-    <thead><tr><th>Name</th><th>Contact</th><th>Investment amount</th><th>Status</th><th></th></tr></thead>
+    <thead><tr><th>Name</th><th>Contact</th><th>Notes</th><th>Status</th><th></th></tr></thead>
     <tbody>@for (investor of filteredInvestors(); track investor._id) {
       <tr>
         <td class="t-name">{{ investor.Name }}</td>
         <td><div>{{ investor.Email }}</div><div class="t-muted">{{ investor.Phone }}</div></td>
-        <td>{{ investor.InvestmentAmount | number:'1.2-2' }}</td>
+        <td class="t-muted">{{ investor.Notes || '—' }}</td>
         <td><span class="tag">{{ investor.Status }}</span></td>
         <td><div class="rowacts">
           <button class="iconbtn" type="button" (click)="openEditDialog(investor)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>

@@ -5,7 +5,7 @@ export interface Investor {
   Name: string;
   Email?: string;
   Phone: string;
-  InvestmentAmount: number;
+  Notes?: string;
   Status: InvestorStatus;
   createdAt?: string;
   updatedAt?: string;
@@ -13,8 +13,8 @@ export interface Investor {
 
 export interface InvestorInput {
   Name: string;
-  Email: string;
+  Email?: string;
   Phone: string;
-  InvestmentAmount: number;
+  Notes?: string;
   Status: InvestorStatus;
 }
