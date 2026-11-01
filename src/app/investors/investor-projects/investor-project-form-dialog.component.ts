@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { Project } from '../../interfaces/project.interface';
 import {
   InvestorProject,
@@ -21,7 +22,15 @@ interface DialogData {
 @Component({
   selector: 'app-investor-project-form-dialog',
   standalone: true,
-  imports: [ReactiveFormsModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule],
+  imports: [
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatDatepickerModule,
+  ],
   templateUrl: './investor-project-form-dialog.component.html',
 })
 export class InvestorProjectFormDialogComponent {
@@ -36,7 +45,7 @@ export class InvestorProjectFormDialogComponent {
     Amount: [this.assignment?.Amount ?? 0, [Validators.required, Validators.min(0)]],
     DurationMonths: [this.assignment?.DurationMonths ?? 1, [Validators.required, Validators.min(1)]],
     ProfitMargin: [this.assignment?.ProfitMargin ?? 0, [Validators.required, Validators.min(0)]],
-    Deadline: [this.assignment?.Deadline?.slice(0, 10) ?? '', Validators.required],
+    Deadline: [this.assignment?.Deadline ? new Date(this.assignment.Deadline) : null, Validators.required],
     Notes: [this.assignment?.Notes ?? ''],
     Status: [this.assignment?.Status ?? ('pending' as InvestorProjectStatus), Validators.required],
   });
@@ -50,9 +59,11 @@ export class InvestorProjectFormDialogComponent {
       this.form.markAllAsTouched();
       return;
     }
+    const raw = this.form.getRawValue();
     const payload: InvestorProjectInput = {
       InvestorId: this.data.investorId,
-      ...this.form.getRawValue(),
+      ...raw,
+      Deadline: raw.Deadline ? raw.Deadline.toISOString() : '',
     };
     this.dialogRef.close(payload);
   }

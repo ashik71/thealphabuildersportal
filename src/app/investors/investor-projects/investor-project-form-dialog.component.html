@@ -25,7 +25,9 @@
     </mat-form-field>
     <mat-form-field appearance="outline" class="form-stack__field">
       <mat-label>Deadline</mat-label>
-      <input matInput type="date" formControlName="Deadline" />
+      <input matInput [matDatepicker]="deadlinePicker" formControlName="Deadline" />
+      <mat-datepicker-toggle matSuffix [for]="deadlinePicker"></mat-datepicker-toggle>
+      <mat-datepicker #deadlinePicker></mat-datepicker>
     </mat-form-field>
     <mat-form-field appearance="outline" class="form-stack__field">
       <mat-label>Status</mat-label>
