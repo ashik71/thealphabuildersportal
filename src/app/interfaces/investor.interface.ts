@@ -39,6 +39,13 @@ export interface InvestorPaymentInput {
   Notes?: string;
 }
 
+export interface InvestorPayment extends InvestorPaymentInput {
+  _id: string;
+  InvestorProjectId: string;
+  Date: string;
+  createdAt?: string;
+}
+
 export interface Investor {
   _id: string;
   Name: string;

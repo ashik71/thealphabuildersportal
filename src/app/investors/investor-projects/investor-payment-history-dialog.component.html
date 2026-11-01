@@ -1,0 +1,27 @@
+<h2 mat-dialog-title>Payment History</h2>
+<mat-dialog-content>
+  <p>Project: <strong>{{ typeof data.assignment.ProjectId === 'string' ? data.assignment.ProjectId : data.assignment.ProjectId.Name }}</strong></p>
+  @if (payments | async; as history) {
+    @if (history.length === 0) {
+      <p class="investor-projects__empty">No payments recorded yet.</p>
+    } @else {
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead><tr><th>Date</th><th class="num">Amount</th><th>Method</th><th>Notes</th></tr></thead>
+          <tbody>
+            @for (payment of history; track payment._id) {
+              <tr>
+                <td>{{ payment.Date | date: 'mediumDate' }}</td>
+                <td class="num">{{ payment.Amount | number: '1.0-2' }}</td>
+                <td>{{ payment.PaymentMethod }}</td>
+                <td class="t-muted">{{ payment.Notes || '—' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  } @else {
+    <mat-spinner diameter="32" />
+  }
+</mat-dialog-content>

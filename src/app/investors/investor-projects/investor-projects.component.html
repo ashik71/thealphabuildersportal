@@ -30,6 +30,7 @@
               <td><span class="tag">{{ assignment.Status }}</span></td>
               <td><div class="rowacts">
                 <button class="iconbtn" type="button" (click)="openPaymentDialog(assignment)" matTooltip="Make payment"><mat-icon>payments</mat-icon></button>
+                <button class="iconbtn" type="button" (click)="openPaymentHistory(assignment)" matTooltip="Payment history"><mat-icon>history</mat-icon></button>
                 <button class="iconbtn" type="button" (click)="openEditDialog(assignment)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
                 <button class="iconbtn" type="button" (click)="deleteAssignment(assignment)" matTooltip="Remove"><mat-icon>delete</mat-icon></button>
               </div></td>

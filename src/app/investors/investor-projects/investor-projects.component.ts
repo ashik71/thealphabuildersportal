@@ -15,6 +15,7 @@ import { PageHeaderComponent } from '../../shared/components/page-header/page-he
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { InvestorProjectFormDialogComponent } from './investor-project-form-dialog.component';
 import { InvestorPaymentDialogComponent } from './investor-payment-dialog.component';
+import { InvestorPaymentHistoryDialogComponent } from './investor-payment-history-dialog.component';
 
 @Component({
   selector: 'app-investor-projects',
@@ -93,12 +94,20 @@ export class InvestorProjectsComponent {
       this.snackBar.open('This assignment has no remaining due amount', 'Dismiss', { duration: 3000 });
       return;
     }
+
     this.dialog.open(InvestorPaymentDialogComponent, { data: assignment, width: '480px' }).afterClosed().subscribe((payload) => {
       if (!payload) return;
       this.investorService.createPayment(this.investorId, assignment._id, payload).subscribe({
         next: () => { this.snackBar.open('Payment recorded', 'Dismiss', { duration: 3000 }); this.refresh(); },
         error: () => this.snackBar.open('Could not record payment', 'Dismiss', { duration: 4000 }),
       });
+    });
+  }
+
+  openPaymentHistory(assignment: InvestorProject) {
+    this.dialog.open(InvestorPaymentHistoryDialogComponent, {
+      data: { investorId: this.investorId, assignment },
+      width: '760px',
     });
   }
 

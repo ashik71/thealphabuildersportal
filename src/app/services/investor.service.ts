@@ -8,6 +8,7 @@ import {
   InvestorProject,
   InvestorProjectInput,
   InvestorPaymentInput,
+  InvestorPayment,
 } from '../interfaces/investor.interface';
 
 @Injectable({ providedIn: 'root' })
@@ -51,6 +52,11 @@ export class InvestorService {
     return this.http.post<InvestorPaymentInput>(
       `${this.baseUrl}/${investorId}/projects/${assignmentId}/payments`,
       payment
+    );
+  }
+  getPayments(investorId: string, assignmentId: string): Observable<InvestorPayment[]> {
+    return this.http.get<InvestorPayment[]>(
+      `${this.baseUrl}/${investorId}/projects/${assignmentId}/payments`
     );
   }
 }
