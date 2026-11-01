@@ -1,0 +1,59 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit Project Assignment' : 'Assign Project' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content class="form-stack">
+    <mat-form-field appearance="outline" class="form-stack__field">
+      <mat-label>Project</mat-label>
+      <mat-select formControlName="ProjectId">
+        @for (project of data.projects; track project._id) {
+          <mat-option [value]="project._id">{{ project.Name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form-stack__field">
+      <mat-label>Amount</mat-label>
+      <input matInput type="number" min="0" formControlName="Amount" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-stack__field">
+      <mat-label>Paid</mat-label>
+      <input matInput type="number" min="0" formControlName="Paid" />
+      @if (form.controls.Paid.hasError('exceedsAmount')) {
+        <mat-error>Paid cannot exceed Amount</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-stack__field">
+      <mat-label>Profit margin</mat-label>
+      <input matInput type="number" min="0" formControlName="ProfitMargin" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-stack__field">
+      <mat-label>Deadline</mat-label>
+      <input matInput type="date" formControlName="Deadline" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-stack__field">
+      <mat-label>Payment method</mat-label>
+      <mat-select formControlName="PaymentMethod">
+        <mat-option value="Bank">Bank</mat-option>
+        <mat-option value="Mobile Banking">Mobile Banking</mat-option>
+        <mat-option value="Cash">Cash</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-stack__field">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="Status">
+        <mat-option value="pending">Pending</mat-option>
+        <mat-option value="paid">Paid</mat-option>
+        <mat-option value="overdue">Overdue</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-stack__field">
+      <mat-label>Notes</mat-label>
+      <textarea matInput formControlName="Notes" rows="2"></textarea>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">Cancel</button>
+    <button mat-flat-button color="primary" type="submit">{{ isEdit ? 'Save Changes' : 'Assign Project' }}</button>
+  </mat-dialog-actions>
+</form>

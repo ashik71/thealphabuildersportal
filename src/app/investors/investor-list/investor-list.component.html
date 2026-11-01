@@ -19,16 +19,22 @@
   <p class="investor-list__empty">No investors match your search.</p>
 } @else {
   <section class="panel"><div class="tbl-wrap"><table class="tbl">
-    <thead><tr><th>Name</th><th>Contact</th><th>Notes</th><th>Status</th><th></th></tr></thead>
+    <thead><tr><th>Name</th><th>Contact</th><th>Projects</th><th>Status</th><th></th></tr></thead>
     <tbody>@for (investor of filteredInvestors(); track investor._id) {
-      <tr>
+      <tr class="tbl__row--clickable" (click)="openProjects(investor._id)">
         <td class="t-name">{{ investor.Name }}</td>
         <td><div>{{ investor.Email }}</div><div class="t-muted">{{ investor.Phone }}</div></td>
-        <td class="t-muted">{{ investor.Notes || '—' }}</td>
+        <td>
+          @if ((investor.Projects ?? []).length === 0) {
+            <span class="t-muted">—</span>
+          } @else {
+            <span [matTooltip]="projectNames(investor.Projects!)">{{ investor.Projects!.length }} project{{ investor.Projects!.length === 1 ? '' : 's' }}</span>
+          }
+        </td>
         <td><span class="tag">{{ investor.Status }}</span></td>
         <td><div class="rowacts">
-          <button class="iconbtn" type="button" (click)="openEditDialog(investor)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
-          <button class="iconbtn" type="button" (click)="deleteInvestor(investor)" matTooltip="Delete"><mat-icon>delete</mat-icon></button>
+          <button class="iconbtn" type="button" (click)="$event.stopPropagation(); openEditDialog(investor)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+          <button class="iconbtn" type="button" (click)="$event.stopPropagation(); deleteInvestor(investor)" matTooltip="Delete"><mat-icon>delete</mat-icon></button>
         </div></td>
       </tr>
     }</tbody>

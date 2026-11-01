@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Investor, InvestorInput } from '../interfaces/investor.interface';
+import { Investor, InvestorInput, InvestorProject, InvestorProjectInput } from '../interfaces/investor.interface';
 
 @Injectable({ providedIn: 'root' })
 export class InvestorService {
@@ -20,5 +20,21 @@ export class InvestorService {
   }
   delete(id: string): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.baseUrl}/${id}`);
+  }
+  getProjects(investorId: string): Observable<InvestorProject[]> {
+    return this.http.get<InvestorProject[]>(`${this.baseUrl}/${investorId}/projects`);
+  }
+  createProject(investorId: string, assignment: InvestorProjectInput): Observable<InvestorProject> {
+    return this.http.post<InvestorProject>(`${this.baseUrl}/${investorId}/projects`, assignment);
+  }
+  updateProject(
+    investorId: string,
+    assignmentId: string,
+    assignment: Partial<InvestorProjectInput>
+  ): Observable<InvestorProject> {
+    return this.http.put<InvestorProject>(`${this.baseUrl}/${investorId}/projects/${assignmentId}`, assignment);
+  }
+  deleteProject(investorId: string, assignmentId: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.baseUrl}/${investorId}/projects/${assignmentId}`);
   }
 }

@@ -1,4 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,7 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { InvestorService } from '../../services/investor.service';
-import { Investor } from '../../interfaces/investor.interface';
+import { Investor, InvestorProjectSummary } from '../../interfaces/investor.interface';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 import { InvestorFormDialogComponent } from './investor-form-dialog.component';
@@ -24,6 +25,7 @@ export class InvestorListComponent {
   private readonly service = inject(InvestorService);
   private readonly dialog = inject(MatDialog);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly router = inject(Router);
   readonly loading = signal(true);
   readonly error = signal(false);
   readonly investors = signal<Investor[]>([]);
@@ -34,6 +36,14 @@ export class InvestorListComponent {
   });
 
   constructor() { this.refresh(); }
+
+  openProjects(investorId: string) {
+    this.router.navigate(['/admin/investors', investorId, 'projects']);
+  }
+
+  projectNames(projects: InvestorProjectSummary[]) {
+    return projects.map((project) => project.ProjectName).join(', ');
+  }
 
   refresh() {
     this.loading.set(true);

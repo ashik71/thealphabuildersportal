@@ -1,0 +1,12 @@
+.investor-projects {
+  &__loading {
+    display: flex;
+    justify-content: center;
+    padding: 3rem;
+  }
+
+  &__empty {
+    color: var(--sb-ink-muted);
+    font-size: 13px;
+  }
+}

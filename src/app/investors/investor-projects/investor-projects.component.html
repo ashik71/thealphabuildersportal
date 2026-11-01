@@ -1,0 +1,40 @@
+<app-page-header [title]="investor()?.Name || 'Investor projects'" subtitle="Assigned projects and investment details" [showBack]="true">
+  <button mat-flat-button color="primary" (click)="openCreateDialog()">
+    <mat-icon>add</mat-icon>
+    Assign Project
+  </button>
+</app-page-header>
+
+@if (loading()) {
+  <div class="investor-projects__loading"><mat-spinner diameter="36" /></div>
+} @else if (error()) {
+  <p class="investor-projects__empty">Could not load assigned projects. <button mat-button color="primary" (click)="refresh()">Try again</button></p>
+} @else if (assignments().length === 0) {
+  <p class="investor-projects__empty">No projects assigned to this investor yet.</p>
+} @else {
+  <section class="panel">
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Project</th><th class="num">Amount</th><th class="num">Paid</th><th class="num">Due</th><th>Profit margin</th><th>Deadline</th><th>Method</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          @for (assignment of assignments(); track assignment._id) {
+            <tr>
+              <td class="t-name">{{ projectName(assignment) }}</td>
+              <td class="num">{{ assignment.Amount | number: '1.0-2' }}</td>
+              <td class="num">{{ assignment.Paid | number: '1.0-2' }}</td>
+              <td class="num">{{ assignment.Due | number: '1.0-2' }}</td>
+              <td>{{ assignment.ProfitMargin | number: '1.0-2' }}</td>
+              <td>{{ assignment.Deadline | date: 'mediumDate' }}</td>
+              <td>{{ assignment.PaymentMethod }}</td>
+              <td><span class="tag">{{ assignment.Status }}</span></td>
+              <td><div class="rowacts">
+                <button class="iconbtn" type="button" (click)="openEditDialog(assignment)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+                <button class="iconbtn" type="button" (click)="deleteAssignment(assignment)" matTooltip="Remove"><mat-icon>delete</mat-icon></button>
+              </div></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+}
