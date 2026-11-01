@@ -2,7 +2,13 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Investor, InvestorInput, InvestorProject, InvestorProjectInput } from '../interfaces/investor.interface';
+import {
+  Investor,
+  InvestorInput,
+  InvestorProject,
+  InvestorProjectInput,
+  InvestorPaymentInput,
+} from '../interfaces/investor.interface';
 
 @Injectable({ providedIn: 'root' })
 export class InvestorService {
@@ -36,5 +42,15 @@ export class InvestorService {
   }
   deleteProject(investorId: string, assignmentId: string): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.baseUrl}/${investorId}/projects/${assignmentId}`);
+  }
+  createPayment(
+    investorId: string,
+    assignmentId: string,
+    payment: InvestorPaymentInput
+  ): Observable<InvestorPaymentInput> {
+    return this.http.post<InvestorPaymentInput>(
+      `${this.baseUrl}/${investorId}/projects/${assignmentId}/payments`,
+      payment
+    );
   }
 }

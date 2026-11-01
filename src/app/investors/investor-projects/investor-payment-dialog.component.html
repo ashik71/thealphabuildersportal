@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>Make Payment</h2>
+
+<form [formGroup]="form" (ngSubmit)="save()">
+  <mat-dialog-content class="form-stack">
+    <p>Remaining due: {{ assignment.Due | number: '1.0-2' }}</p>
+    <mat-form-field appearance="outline" class="form-stack__field">
+      <mat-label>Paid amount</mat-label>
+      <input matInput type="number" min="0.01" formControlName="Amount" />
+      @if (form.controls.Amount.hasError('max')) {
+        <mat-error>Payment cannot exceed the remaining due amount</mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-stack__field">
+      <mat-label>Payment method</mat-label>
+      <mat-select formControlName="PaymentMethod">
+        <mat-option value="Bank">Bank</mat-option>
+        <mat-option value="Mobile Banking">Mobile Banking</mat-option>
+        <mat-option value="Cash">Cash</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="form-stack__field">
+      <mat-label>Payment notes</mat-label>
+      <textarea matInput formControlName="Notes" rows="3"></textarea>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">Cancel</button>
+    <button mat-flat-button color="primary" type="submit">Record Payment</button>
+  </mat-dialog-actions>
+</form>

@@ -9,7 +9,6 @@ import { Project } from '../../interfaces/project.interface';
 import {
   InvestorProject,
   InvestorProjectInput,
-  InvestorPaymentMethod,
   InvestorProjectStatus,
 } from '../../interfaces/investor.interface';
 
@@ -35,10 +34,9 @@ export class InvestorProjectFormDialogComponent {
   readonly form = this.fb.nonNullable.group({
     ProjectId: [this.projectId(this.assignment?.ProjectId) ?? '', Validators.required],
     Amount: [this.assignment?.Amount ?? 0, [Validators.required, Validators.min(0)]],
-    Paid: [this.assignment?.Paid ?? 0, [Validators.required, Validators.min(0)]],
+    DurationMonths: [this.assignment?.DurationMonths ?? 1, [Validators.required, Validators.min(1)]],
     ProfitMargin: [this.assignment?.ProfitMargin ?? 0, [Validators.required, Validators.min(0)]],
     Deadline: [this.assignment?.Deadline?.slice(0, 10) ?? '', Validators.required],
-    PaymentMethod: [this.assignment?.PaymentMethod ?? ('Bank' as InvestorPaymentMethod), Validators.required],
     Notes: [this.assignment?.Notes ?? ''],
     Status: [this.assignment?.Status ?? ('pending' as InvestorProjectStatus), Validators.required],
   });
@@ -48,10 +46,6 @@ export class InvestorProjectFormDialogComponent {
   }
 
   save() {
-    const { Amount, Paid } = this.form.getRawValue();
-    if (Paid > Amount) {
-      this.form.controls.Paid.setErrors({ exceedsAmount: true });
-    }
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;

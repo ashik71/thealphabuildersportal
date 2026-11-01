@@ -12,11 +12,12 @@ export interface InvestorProject {
   InvestorId: string;
   ProjectId: string | { _id: string; Name: string };
   Amount: number;
+  DurationMonths: number;
   Paid: number;
   Due: number;
   ProfitMargin: number;
   Deadline: string;
-  PaymentMethod: InvestorPaymentMethod;
+  PaymentMethod?: InvestorPaymentMethod;
   Notes?: string;
   Status: InvestorProjectStatus;
 }
@@ -25,12 +26,17 @@ export interface InvestorProjectInput {
   InvestorId: string;
   ProjectId: string;
   Amount: number;
-  Paid: number;
+  DurationMonths: number;
   ProfitMargin: number;
   Deadline: string;
-  PaymentMethod: InvestorPaymentMethod;
   Notes?: string;
   Status: InvestorProjectStatus;
+}
+
+export interface InvestorPaymentInput {
+  Amount: number;
+  PaymentMethod: InvestorPaymentMethod;
+  Notes?: string;
 }
 
 export interface Investor {
